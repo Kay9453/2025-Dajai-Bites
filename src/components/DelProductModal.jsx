@@ -35,7 +35,7 @@ function DelProductModal({
 
     const deleteProduct = async() => {
         try {
-            const res = await axios.delete(`${BASE_URL}/v2/api/${API_PATH}/admin/product/${tempProduct.id}`,{
+            await axios.delete(`${BASE_URL}/v2/api/${API_PATH}/admin/product/${tempProduct.id}`,{
                 "data": {
                 ...tempProduct,
                 origin_price: Number(tempProduct.origin_price),
@@ -43,7 +43,6 @@ function DelProductModal({
                 is_enabled: tempProduct.is_enabled ? 1 : 0
                 }
             });
-            console.log(res);
         } catch (error) {
             console.error(error);
             alert("刪除產品失敗!")
