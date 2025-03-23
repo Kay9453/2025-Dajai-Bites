@@ -1,0 +1,35 @@
+.admin-content{
+    width: calc(100% - 300px);
+    margin-left: 300px;
+    padding-left: 24px;
+    padding-right: 24px;
+    // .form-select, .form-control, .form-control-plaintext{
+    //     font-size: 16px;
+    // }
+    // .form-label{
+    //     font-size: 16px;
+    //     margin-bottom: 0;
+    // }
+    // .page-link{
+    //     color: $brand-01;
+    //     &:hover{
+    //         color: white;
+    //         background-color: $brand-01;
+    //     }
+    //     &:focus{
+    //         color: white;
+    //         background-color: $brand-01;
+    //     }
+    // }
+    .w-content{
+        width: fit-content;
+    }
+    .danger-text{
+        color: #cb7777;
+    }
+}
+
+.admin-table-content{
+    // height: calc(100vh - 262px);
+    height: calc(100vh - 200px);
+}
