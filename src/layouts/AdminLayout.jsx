@@ -15,8 +15,7 @@ export default function AdminLayout(){
 
     const handleLogout = async() => {
         try {
-            const res = await axios.post(`${BASE_URL}/v2/logout`);
-            console.log(res);
+            await axios.post(`${BASE_URL}/v2/logout`);
             document.cookie = "myToken=; path=/; max-age=0";
             navigate("/admin-login");
         } catch (error) {

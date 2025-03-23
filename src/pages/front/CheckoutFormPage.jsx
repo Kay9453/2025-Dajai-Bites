@@ -20,7 +20,6 @@ export default function CheckoutFormPage() {
     const getCart = async () => {
         try {
             const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/cart`);
-            console.log("我是購物車資料",res.data.data);
             setCart(res.data.data);
         } catch (error) {
             console.error(error);

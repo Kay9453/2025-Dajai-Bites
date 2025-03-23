@@ -14,7 +14,6 @@ function ProductModal({
 }){
     
     const [modalData,setModalData] = useState(tempProduct);
-    // console.log(modalData);
 
     // 當 tempProduct 有更新時，把 modalData 一起更新
     useEffect(() => {
@@ -89,7 +88,7 @@ function ProductModal({
 
     const createProduct = async() => {
         try {
-          const res = await axios.post(`${BASE_URL}/v2/api/${API_PATH}/admin/product`,{
+          await axios.post(`${BASE_URL}/v2/api/${API_PATH}/admin/product`,{
             "data": {
               ...modalData,
               origin_price: Number(modalData.origin_price),
@@ -97,7 +96,6 @@ function ProductModal({
               is_enabled: modalData.is_enabled ? 1 : 0
             }
           });
-          console.log(res);
         //   handleCloseProductModal();
         } catch (error) {
             console.error(error);
@@ -107,7 +105,7 @@ function ProductModal({
 
     const updateProduct = async() => {
         try {
-          const res = await axios.put(`${BASE_URL}/v2/api/${API_PATH}/admin/product/${modalData.id}`,{
+          await axios.put(`${BASE_URL}/v2/api/${API_PATH}/admin/product/${modalData.id}`,{
             "data": {
               ...modalData,
               origin_price: Number(modalData.origin_price),
@@ -115,7 +113,6 @@ function ProductModal({
               is_enabled: modalData.is_enabled ? 1 : 0
             }
           });
-          console.log(res);
         } catch (error) {
             console.error(error);
             alert("編輯產品失敗!")

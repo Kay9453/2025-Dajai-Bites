@@ -17,7 +17,6 @@ export default function ProductDetailPage() {
       const res = await axios.get(
         `${BASE_URL}/v2/api/${API_PATH}/product/${id}`
       );
-      console.log(res.data.product);
 
       setProduct(res.data.product);
     } catch (error) {

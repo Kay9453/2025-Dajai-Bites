@@ -22,7 +22,6 @@ export default function ProductsPage() {
     const getProducts = async () =>{
         try {
             const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/products/all`);
-            console.log("取得陣列",res.data.products);
             
             setProducts(res.data.products);
             getCategory(res.data.products);
@@ -34,7 +33,6 @@ export default function ProductsPage() {
     // 取得分類
     const getCategory = (products)=>{
         const categoryArr = ["全部",...new Set(products.map((product)=>product.category))];
-        console.log(categoryArr);
         setCategory(categoryArr);
     }
 
@@ -121,7 +119,6 @@ export default function ProductsPage() {
                                                 type="button"
                                                 data-value={item}
                                                 onClick={(e)=>{
-                                                    console.log(e.target.value)
                                                     setSelectedCategory(e.target.dataset.value);
                                                 }} 
                                                 className="py-2 d-block text-muted">

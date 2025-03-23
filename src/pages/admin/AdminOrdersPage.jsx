@@ -16,7 +16,6 @@ export default function AdminOrdersPage(){
             const res = await axios.get(
             `${BASE_URL}/v2/api/${API_PATH}/admin/orders?page=${page}`
             );
-            console.log("訂單資料",res.data.orders);
             setOrders(res.data.orders);
             
         } catch (error) {
