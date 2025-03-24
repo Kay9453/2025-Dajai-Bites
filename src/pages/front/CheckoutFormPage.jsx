@@ -2,7 +2,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Toast from "../../components/Toast";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function CheckoutFormPage() {
 
@@ -12,20 +12,22 @@ export default function CheckoutFormPage() {
     const [cart, setCart] = useState({}); //儲存購物車列表
     const navigate = useNavigate();
 
+    // 取得購物車
+    const getCart = useCallback(async () => {
+      try {
+          const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/cart`);
+          setCart(res.data.data);
+      } catch (error) {
+          console.error(error);
+          alert("取得購物車列表失敗");
+      }
+  },[API_PATH, BASE_URL]);
+
     useEffect(()=>{
         getCart();
-    },[])
+    },[getCart])
 
-    // 取得購物車
-    const getCart = async () => {
-        try {
-            const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/cart`);
-            setCart(res.data.data);
-        } catch (error) {
-            console.error(error);
-            alert("取得購物車列表失敗");
-        }
-    };
+
 
     const {
         register,

@@ -1,5 +1,5 @@
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Toast from "../../components/Toast";
 
@@ -19,7 +19,7 @@ export default function ProductsPage() {
     const [selectedCategory,setSelectedCategory] = useState("全部");
 
 
-    const getProducts = async () =>{
+    const getProducts = useCallback(async () =>{
         try {
             const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/products/all`);
             
@@ -28,7 +28,7 @@ export default function ProductsPage() {
         } catch (error) {
             console.error(error);
         }
-    }
+    },[API_PATH, BASE_URL])
 
     // 取得分類
     const getCategory = (products)=>{
@@ -57,7 +57,7 @@ export default function ProductsPage() {
 
     useEffect(()=>{
         getProducts();
-    },[])
+    },[getProducts])
 
 
 
