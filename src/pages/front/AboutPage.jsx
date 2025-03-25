@@ -71,7 +71,7 @@ export default function AboutPage(){
             <div className="col-12">
                 <div className="d-flex flex-column align-items-center py-5">
                     <h3 className="card-title fw-bold mb-4 text-brand-03">開啟你的美味晨光</h3>
-                    <p className="fs-5 card-text mb-3 fw-bold text-center">現在就挑選你的理想早餐，用最簡單的方式開始美好早晨！</p>
+                    <p className="fs-5 card-text mb-3 fw-bold text-center px-3">現在就挑選你的理想早餐，用最簡單的方式開始美好早晨！</p>
                     <Link to="/products" className="btn btn-custom btn-outlined w-content">立即選購</Link>
                 </div>
             </div>

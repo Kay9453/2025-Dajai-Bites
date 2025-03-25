@@ -1,3 +1,5 @@
+import { Collapse } from "bootstrap";
+import { useRef, useState } from "react";
 import { NavLink } from "react-router-dom"
 
 export default function Header() {
@@ -8,6 +10,27 @@ export default function Header() {
     {path: "/cart", name: "購物車", icon: "shopping_cart"},
     // {path: "/login", name:"登入/註冊", icon: "login"}
   ]
+
+  const [isOpen, setIsOpen] = useState(false); // 控制 Navbar 開關
+  const navRef = useRef(null);
+
+  // 點擊 NavLink 時關閉 Navbar
+  const closeNavbar = () => {
+    if (navRef.current) {
+      const bsCollapse = new Collapse(navRef.current, { toggle: false });
+      bsCollapse.hide();
+      setIsOpen(false); // 更新 state
+    }
+  };
+  
+  // 點擊漢堡選單時切換 Navbar 展開/收合
+  const toggleNavbar = () => {
+    if (navRef.current) {
+      const bsCollapse = new Collapse(navRef.current, { toggle: false });
+      isOpen ? bsCollapse.hide() : bsCollapse.show();
+      setIsOpen(!isOpen); // 更新開合狀態
+    }
+  };
 
   return (
       <div
@@ -21,10 +44,12 @@ export default function Header() {
             <button
               className="navbar-toggler"
               type="button"
-              data-bs-toggle="collapse"
+              aria-expanded={isOpen}
+              onClick={toggleNavbar} 
+              // data-bs-toggle="collapse"
               data-bs-target="#navbarNavAltMarkup"
               aria-controls="navbarNavAltMarkup"
-              aria-expanded="false"
+              // aria-expanded="false"
               aria-label="Toggle navigation"
             >
               <span className="navbar-toggler-icon"></span>
@@ -32,12 +57,13 @@ export default function Header() {
             <div
               className="collapse navbar-collapse justify-content-end"
               id="navbarNavAltMarkup"
+              ref={navRef}
             >
               <div className="navbar-nav align-items-center gap-3 gap-lg-0">
                 {
                   routes.map((route)=>{
                     return(
-                      <NavLink key={route.path} className="nav-item nav-link me-4 d-flex align-items-center" to={route.path}>
+                      <NavLink key={route.path} className="nav-item nav-link me-4 d-flex align-items-center" to={route.path} onClick={closeNavbar}>
                         <span className="material-symbols-outlined pe-2">
                           {route.icon}
                         </span>

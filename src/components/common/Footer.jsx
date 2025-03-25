@@ -37,7 +37,7 @@ export default function Footer() {
             <div className="col-lg-3 col-12">
               <div className="d-flex flex-column align-items-center d-lg-block mt-4 mt-lg-0">
                 <h4 className="mb-lg-40 mb-8">關於本站</h4>
-                <ul className="d-flex flex-column list-unstyled">
+                <ul className="d-flex flex-column align-items-center align-items-lg-start list-unstyled">
                   <li className="mb-12">
                     <Link to="/about" className="text-white">關於我們</Link>
                   </li>
