@@ -112,20 +112,18 @@ export default function ProductsPage() {
                     <ul className="list-unstyled">
                         {
                             category.map((item)=>{
-                                return(
-                                    <>
-                                        <li>
-                                            <Link 
-                                                type="button"
-                                                data-value={item}
-                                                onClick={(e)=>{
-                                                    setSelectedCategory(e.target.dataset.value);
-                                                }} 
-                                                className="py-2 d-block text-muted">
-                                                {item}
-                                            </Link>
-                                        </li>
-                                    </>
+                                return(  
+                                  <li key={item}>
+                                      <Link 
+                                          type="button"
+                                          data-value={item}
+                                          onClick={(e)=>{
+                                              setSelectedCategory(e.target.dataset.value);
+                                          }} 
+                                          className="py-2 d-block text-muted">
+                                          {item}
+                                      </Link>
+                                  </li>
                                 )
                             })
                         }

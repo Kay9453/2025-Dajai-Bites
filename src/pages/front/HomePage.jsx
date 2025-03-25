@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Toast from "../../components/Toast";
 
@@ -29,14 +29,14 @@ export default function HomePage() {
 
     const [products,setProducts] = useState([]);
 
-    const getProducts = async () =>{
+    const getProducts = useCallback (async () =>{
         try {
             const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/products/all`);
             setProducts(res.data.products);
         } catch (error) {
             console.error(error);
         }
-    }
+    },[BASE_URL,API_PATH])
 
     // 加入購物車
     const addCartItem = async (product_id, qty) => {
@@ -59,7 +59,7 @@ export default function HomePage() {
 
     useEffect(()=>{
         getProducts();
-    },[])
+    },[getProducts])
 
     return (
       <div className="container-fluid px-0">

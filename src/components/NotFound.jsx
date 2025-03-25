@@ -10,7 +10,7 @@ export default function NotFound() {
     }, 4000)
 
     return  () => clearTimeout(timer);
-  }, [])
+  }, [navigate])
 
   return (
     <>

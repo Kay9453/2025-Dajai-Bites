@@ -62,7 +62,7 @@ export default function AdminProductPage(){
             // alert('請先登入')
             navigate("/admin-login");
         }
-    },[])
+    },[navigate])
   
     const handleOpenProductModal = (mode,product) => {
         setModalMode(mode);

@@ -37,7 +37,7 @@ export default function AdminOrdersPage(){
             // alert('請先登入')
             navigate("/admin-login");
         }
-    },[])
+    },[navigate])
 
     return(
         <>

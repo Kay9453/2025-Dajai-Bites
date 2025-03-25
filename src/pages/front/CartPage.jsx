@@ -1,6 +1,6 @@
 import axios from "axios";
 import Toast from "../../components/Toast";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 
@@ -16,42 +16,41 @@ export default function CartPage() {
     const [cart, setCart] = useState({}); //儲存購物車列表
     const [products,setProducts] = useState([]);
 
-    useEffect(() => {
-        getCart();
-        getProducts();
-    }, []);
-
     const swiperRef = useRef();
 
-    new Swiper(swiperRef.current, {
-      modules: [Autoplay],
-      loop: true,
-      autoplay: {
-        delay: 2500,
-        disableOnInteraction: false,
-      },
-      slidesPerView: 2,
-      spaceBetween: 10,
-      breakpoints: {
-        767: {
-          slidesPerView: 3,
-          spaceBetween: 30,
-        },
-      },
-    });
+    useEffect(()=>{
+      if (products.length > 0){
+        new Swiper(swiperRef.current, {
+          modules: [Autoplay],
+          loop: true,
+          autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
+          },
+          slidesPerView: 2,
+          spaceBetween: 10,
+          breakpoints: {
+            767: {
+              slidesPerView: 3,
+              spaceBetween: 30,
+            },
+          },
+        });
+      }
+    }, [products])
     
 
-    const getProducts = async () =>{
+    const getProducts = useCallback (async () =>{
       try {
           const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/products/all`);
           setProducts(res.data.products);
       } catch (error) {
           console.error(error);
       }
-    }
+    },[BASE_URL,API_PATH])
 
     // 取得購物車
-    const getCart = async () => {
+    const getCart = useCallback (async () => {
         try {
             const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/cart`);
             setCart(res.data.data);
@@ -59,7 +58,7 @@ export default function CartPage() {
             console.error(error);
             alert("取得購物車列表失敗");
         }
-    };
+    },[BASE_URL,API_PATH]);
 
     // 清空購物車
   //   const removeCart = async () => {
@@ -119,6 +118,11 @@ export default function CartPage() {
         }
     };
 
+    useEffect(() => {
+      getCart();
+      getProducts();
+  }, [getCart,getProducts]);
+
   return (
     <div className="container-fluid">
       <div className="container">
@@ -176,7 +180,7 @@ export default function CartPage() {
                                             onClick={()=>{updateCartItem(cartItem.id, cartItem.product_id, cartItem.qty-1)}}
                                             disabled={cartItem.qty === 1}
                                         >
-                                            <i class="bi bi-dash-lg"></i>
+                                            <i className="bi bi-dash-lg"></i>
                                         </button>
                                         </div>
                                         <input
@@ -186,6 +190,7 @@ export default function CartPage() {
                                         aria-label="Example text with button addon"
                                         aria-describedby="button-addon1"
                                         value={cartItem.qty}
+                                        readOnly
                                         />
                                         <div className="input-group-append">
                                         <button
@@ -194,7 +199,7 @@ export default function CartPage() {
                                             id="button-addon2"
                                             onClick={()=>{updateCartItem(cartItem.id, cartItem.product_id, cartItem.qty+1)}}
                                         >
-                                            <i class="bi bi-plus-lg"></i>
+                                            <i className="bi bi-plus-lg"></i>
                                         </button>
                                         </div>
                                     </div>
@@ -209,7 +214,7 @@ export default function CartPage() {
                                         type="button"
                                         id="button-addon2"
                                     >
-                                        <i class="bi bi-x-lg"></i>
+                                        <i className="bi bi-x-lg"></i>
                                     </button>
                                     </td>
                                 </tr>
@@ -218,7 +223,7 @@ export default function CartPage() {
                     }
                 </tbody>
               </table>
-              <div className="input-group w-50 mb-3">
+              {/* <div className="input-group w-50 mb-3">
                 <input
                   type="text"
                   className="form-control rounded-0 border-bottom border-top-0 border-start-0 border-end-0 shadow-none"
@@ -235,7 +240,7 @@ export default function CartPage() {
                     <i className="fas fa-paper-plane"></i>
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className="col-md-4">
               <div className="border p-4 mb-4">
@@ -281,7 +286,7 @@ export default function CartPage() {
                 {
                   products.map((product)=>{
                     return (
-                      <div className="swiper-slide">
+                      <div key={product.id} className="swiper-slide">
                         <div className="card border-0 mb-4 position-relative position-relative">
                           <img
                             src={product.imageUrl}

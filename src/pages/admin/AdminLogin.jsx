@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -40,7 +40,7 @@ export default function AdminLogin(){
       }
     }
     
-    const checkUserLogin = async ()=>{
+    const checkUserLogin = useCallback (async ()=>{
       try {
         await axios.post(`${BASE_URL}/v2/api/user/check`);
         // getProducts();
@@ -49,7 +49,7 @@ export default function AdminLogin(){
         } catch (error) {
           console.error(error);
         }
-    }
+    },[navigate])
 
     useEffect(() => {
         const token = document.cookie.replace(
@@ -60,7 +60,7 @@ export default function AdminLogin(){
         if (token) {
             checkUserLogin();
         }
-    },[]);
+    },[checkUserLogin]);
 
     return (
         <div className="d-flex flex-column justify-content-center align-items-center vh-100">

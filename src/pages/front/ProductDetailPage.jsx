@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Toast from "../../components/Toast";
 
@@ -12,7 +12,7 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState({});
   const [qtySelect, setQtySelect] = useState(1);
 
-  const getProductDetail = async (id) => {
+  const getProductDetail = useCallback (async (id) => {
     try {
       const res = await axios.get(
         `${BASE_URL}/v2/api/${API_PATH}/product/${id}`
@@ -22,7 +22,7 @@ export default function ProductDetailPage() {
     } catch (error) {
       console.error(error);
     }
-  };
+  },[BASE_URL,API_PATH]);
 
   // 加入購物車
   const addCartItem = async (product_id, qty) => {
@@ -45,7 +45,7 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     getProductDetail(id);
-  }, [id]);
+  }, [id,getProductDetail]);
 
   return (
     <div className="container-fluid">
@@ -176,7 +176,7 @@ export default function ProductDetailPage() {
             <p className="mb-1">熱量：{product.calories} 大卡</p>
           </div>
           <div className="col-md-6 col-12">
-            <table class="table table-bordered">
+            <table className="table table-bordered">
               <tbody>
                 <tr>
                   <td>

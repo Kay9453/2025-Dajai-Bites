@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom"
 export default function Header() {
 
   const routes = [
-    // {path: "/about", name: "關於我們", icon: "menu_book"},
+    {path: "/about", name: "關於我們", icon: "menu_book"},
     {path: "/products", name: "產品列表", icon: "breakfast_dining"},
     {path: "/cart", name: "購物車", icon: "shopping_cart"},
     // {path: "/login", name:"登入/註冊", icon: "login"}
