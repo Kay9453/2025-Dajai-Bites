@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import Toast from "../../components/Toast";
 import { useDispatch } from "react-redux";
 import { updateCartData } from "../../redux/cartSlice";
+import AOS from 'aos';
+import 'aos/dist/aos.css'; 
+AOS.init();
 
 export default function HomePage() {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
