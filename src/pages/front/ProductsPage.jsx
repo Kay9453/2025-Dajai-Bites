@@ -1,65 +1,107 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import ReactLoading from "react-loading";
+import { Link } from "react-router-dom";
 import Toast from "../../components/Toast";
+import { useDispatch } from "react-redux";
+import { updateCartData } from "../../redux/cartSlice";
 
 export default function ProductsPage() {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const API_PATH = import.meta.env.VITE_API_PATH;
 
-    const BASE_URL = import.meta.env.VITE_BASE_URL;
-    const API_PATH = import.meta.env.VITE_API_PATH;
+  const [isScreenLoading, setIsScreenLoading] = useState(false); //儲存全螢幕 Loading 狀態
+  const [isLoading, setIsLoading] = useState(false); //儲存小 Loading 狀態
 
-    const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [category, setCategory] = useState([]);
 
-    // const [isScreenLoading, setIsScreenLoading] = useState(false);  //儲存全螢幕 Loading 狀態
-    // const [isLoading, setIsLoading] = useState(false);  //儲存小 Loading 狀態
-    
-    const [products,setProducts] = useState([]);
-    const [category,setCategory] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("全部");
 
-    const [selectedCategory,setSelectedCategory] = useState("全部");
+  const dispatch = useDispatch();
 
+  const [favorites, setFavorites] = useState(() => {
+    const initFavorites = localStorage.getItem("favorites")
+      ? JSON.parse(localStorage.getItem("favorites"))
+      : {};
+    return initFavorites;
+  });
 
-    const getProducts = useCallback(async () =>{
-        try {
-            const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/products/all`);
-            
-            setProducts(res.data.products);
-            getCategory(res.data.products);
-        } catch (error) {
-            console.error(error);
-        }
-    },[API_PATH, BASE_URL])
+  const getProducts = useCallback(async () => {
+    setIsScreenLoading(true);
+    try {
+      const res = await axios.get(
+        `${BASE_URL}/v2/api/${API_PATH}/products/all`
+      );
 
-    // 取得分類
-    const getCategory = (products)=>{
-        const categoryArr = ["全部",...new Set(products.map((product)=>product.category))];
-        setCategory(categoryArr);
+      setProducts(res.data.products);
+      getCategory(res.data.products);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsScreenLoading(false);
     }
+  }, [API_PATH, BASE_URL]);
 
-    // 加入購物車
-    const addCartItem = async (product_id, qty) => {
-        try {
-            await axios.post(`${BASE_URL}/v2/api/${API_PATH}/cart`,{
-                data:{
-                product_id,
-                qty: Number(qty)
-                }
-            })
-            Toast.fire({
-                icon: "success",
-                title: "商品已加入購物車!",
-            });
-        } catch (error) {
-            console.error(error);
-            alert("加入購物車失敗!");
-        }
+  // 取得分類
+  const getCategory = (products) => {
+    const categoryArr = [
+      "全部",
+      ...new Set(products.map((product) => product.category)),
+    ];
+    setCategory(categoryArr);
+  };
+
+  // 加入購物車
+  const addCartItem = async (product_id, qty) => {
+    setIsLoading(true);
+    try {
+      await axios.post(`${BASE_URL}/v2/api/${API_PATH}/cart`, {
+        data: {
+          product_id,
+          qty: Number(qty),
+        },
+      });
+      getCart();
+      Toast.fire({
+        icon: "success",
+        title: "商品已加入購物車!",
+      });
+    } catch (error) {
+      console.error(error);
+      alert("加入購物車失敗!");
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    useEffect(()=>{
-        getProducts();
-    },[getProducts])
+  // 取得購物車
+  const getCart = useCallback(async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/cart`);
 
+      dispatch(updateCartData(res.data.data));
+      // console.log("購物車資料",res.data.data);
+      // setCart(res.data.data);
+    } catch (error) {
+      console.error(error);
+      alert("取得購物車列表失敗");
+    }
+  }, [BASE_URL, API_PATH,dispatch]);
 
+  const toggleFavoriteItem = (product_id) => {
+    const newFavorites = {
+      ...favorites,
+      [product_id]: !favorites[product_id],
+    };
+    localStorage.setItem("favorites", JSON.stringify(newFavorites));
+    setFavorites(newFavorites);
+  };
+
+  useEffect(() => {
+    getProducts();
+    getCart();
+  }, [getProducts, getCart]);
 
   return (
     <div className="container-fluid">
@@ -110,23 +152,22 @@ export default function ProductsPage() {
                 >
                   <div className="card-body py-0">
                     <ul className="list-unstyled">
-                        {
-                            category.map((item)=>{
-                                return(  
-                                  <li key={item}>
-                                      <Link 
-                                          type="button"
-                                          data-value={item}
-                                          onClick={(e)=>{
-                                              setSelectedCategory(e.target.dataset.value);
-                                          }} 
-                                          className="py-2 d-block text-muted">
-                                          {item}
-                                      </Link>
-                                  </li>
-                                )
-                            })
-                        }
+                      {category.map((item) => {
+                        return (
+                          <li key={item}>
+                            <Link
+                              type="button"
+                              data-value={item}
+                              onClick={(e) => {
+                                setSelectedCategory(e.target.dataset.value);
+                              }}
+                              className="py-2 d-block text-muted"
+                            >
+                              {item}
+                            </Link>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 </div>
@@ -135,55 +176,78 @@ export default function ProductsPage() {
           </div>
           <div className="col-md-8">
             <div className="row">
-                {
-                    products.filter((product)=> (product.category === selectedCategory) || selectedCategory === "全部").map((product)=>{
-                        return (
-                            <div key={product.id} className="col-md-6">
-                                <div className="card border-0 mb-4 position-relative position-relative">
-                                <img
-                                    src={product.imageUrl}
-                                    className="card-img-top rounded-0"
-                                    style={{height: 280, objectFit: "cover"}}
-                                    alt={product.title}
+              {products
+                .filter(
+                  (product) =>
+                    product.category === selectedCategory ||
+                    selectedCategory === "全部"
+                )
+                .map((product) => {
+                  return (
+                    <div key={product.id} className="col-md-6">
+                      <div className="card border-0 mb-4">
+                        <div className="position-relative">
+                          <img
+                            src={product.imageUrl}
+                            className="card-img-top rounded-0"
+                            style={{ height: 280, objectFit: "cover" }}
+                            alt={product.title}
+                          />
+                          <button
+                            type="button"
+                            className="border-0 add-fav-icon"
+                            style={{ backgroundColor: "transparent" }}
+                            onClick={() => {
+                              toggleFavoriteItem(product.id);
+                            }}
+                          >
+                            <i
+                              className={` bi ${
+                                favorites[product.id]
+                                  ? "bi-heart-fill text-brand-01"
+                                  : "bi-heart text-white"
+                              } fs-5`}
+                            ></i>
+                          </button>
+                        </div>
+                        <div className="card-body p-0">
+                          <h4 className="mb-0 mt-3">
+                            <Link to={`/products/${product.id}`}>
+                              {product.title}
+                            </Link>
+                          </h4>
+                          <div className="d-flex mt-1">
+                            <p className="card-text mb-0 text-brand-04 fw-bold me-2">
+                              NT${product.price}
+                            </p>
+                            <span className="text-muted ">
+                              <del>NT${product.origin_price}</del>
+                            </span>
+                          </div>
+                          <div className="mt-2 d-flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                addCartItem(product.id, 1);
+                              }}
+                              className="btn btn-custom-sm btn-filled text-nowrap d-flex gap-2 justify-content-center w-100"
+                            >
+                              加入購物車
+                              {isLoading && (
+                                <ReactLoading
+                                  type={"spin"}
+                                  color={"#000"}
+                                  height={"1.5rem"}
+                                  width={"1.5rem"}
                                 />
-                                <Link to="/" className="text-dark">
-                                    <i
-                                    className="far fa-heart position-absolute"
-                                    style={{ right: "16px", top: "16px" }}
-                                    ></i>
-                                </Link>
-                                <div className="card-body p-0">
-                                    <h4 className="mb-0 mt-3">
-                                        <Link to={`/products/${product.id}`}>{product.title}</Link>
-                                    </h4>
-                                    <div className="d-flex mt-1">
-                                        <p className="card-text mb-0 text-brand-04 fw-bold me-2">
-                                            NT${product.price}
-                                        </p>
-                                        <span className="text-muted ">
-                                            <del>NT${product.origin_price}</del>
-                                        </span>
-                                    </div>
-                                    <div className="mt-2 d-flex flex-wrap gap-2">
-                                        <button 
-                                            type="button" 
-                                            onClick={()=>{addCartItem(product.id,1)}} 
-                                            className="btn btn-custom-sm btn-outlined text-nowrap">
-                                                加入購物車
-                                        </button>
-                                        <button 
-                                            type="button" 
-                                            onClick={async()=>{ await addCartItem(product.id,1); navigate("/cart")}} 
-                                            className="btn btn-custom-sm btn-filled text-nowrap">
-                                                直接購買
-                                        </button>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        )
-                        })
-                    }
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
             {/* <nav className="d-flex justify-content-center">
               <ul className="pagination">
@@ -214,6 +278,24 @@ export default function ProductsPage() {
                 </li>
               </ul>
             </nav> */}
+            {isScreenLoading && (
+              <div
+                className="d-flex justify-content-center align-items-center"
+                style={{
+                  position: "fixed",
+                  inset: 0,
+                  backgroundColor: "rgba(255,255,255,0.3)",
+                  zIndex: 999,
+                }}
+              >
+                <ReactLoading
+                  type="spin"
+                  color="black"
+                  width="4rem"
+                  height="4rem"
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

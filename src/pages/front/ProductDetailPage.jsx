@@ -1,6 +1,14 @@
 import axios from "axios";
+import Swiper from "swiper";
+import ReactLoading from "react-loading";
+import { FreeMode, Navigation, Pagination, Thumbs } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updateCartData } from "../../redux/cartSlice";
 import Toast from "../../components/Toast";
 
 export default function ProductDetailPage() {
@@ -9,23 +17,42 @@ export default function ProductDetailPage() {
 
   const { id } = useParams();
 
+  const [isScreenLoading, setIsScreenLoading] = useState(false); //儲存全螢幕 Loading 狀態
+  const [isLoading, setIsLoading] = useState(false); //儲存小 Loading 狀態
+
   const [product, setProduct] = useState({});
   const [qtySelect, setQtySelect] = useState(1);
 
-  const getProductDetail = useCallback (async (id) => {
-    try {
-      const res = await axios.get(
-        `${BASE_URL}/v2/api/${API_PATH}/product/${id}`
-      );
+  const dispatch = useDispatch();
 
-      setProduct(res.data.product);
-    } catch (error) {
-      console.error(error);
-    }
-  },[BASE_URL,API_PATH]);
+  const [favorites, setFavorites] = useState(() => {
+    const initFavorites = localStorage.getItem("favorites")
+      ? JSON.parse(localStorage.getItem("favorites"))
+      : {};
+    return initFavorites;
+  });
+
+  const getProductDetail = useCallback(
+    async (id) => {
+      setIsScreenLoading(true);
+      try {
+        const res = await axios.get(
+          `${BASE_URL}/v2/api/${API_PATH}/product/${id}`
+        );
+        
+        setProduct(res.data.product);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsScreenLoading(false);
+      }
+    },
+    [BASE_URL, API_PATH]
+  );
 
   // 加入購物車
   const addCartItem = async (product_id, qty) => {
+    setIsLoading(true);
     try {
       await axios.post(`${BASE_URL}/v2/api/${API_PATH}/cart`, {
         data: {
@@ -33,6 +60,7 @@ export default function ProductDetailPage() {
           qty: Number(qty),
         },
       });
+      getCart();
       Toast.fire({
         icon: "success",
         title: "商品已加入購物車!",
@@ -40,71 +68,122 @@ export default function ProductDetailPage() {
     } catch (error) {
       console.error(error);
       alert("加入購物車失敗!");
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  // 取得購物車
+  const getCart = useCallback(async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/cart`);
+
+      dispatch(updateCartData(res.data.data));
+      // setCart(res.data.data);
+    } catch (error) {
+      console.error(error);
+      alert("取得購物車列表失敗");
+    }
+  }, [BASE_URL, API_PATH,dispatch]);
+
+  const initSwiper = () => {
+    new Swiper(".product-swiper", {
+      slidesPerView: 1,
+      spaceBetween: 10,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      thumbs: {
+        swiper: ".product-thumbs-swiper",
+      },
+      modules: [FreeMode, Navigation, Thumbs],
+    });
+    new Swiper(".product-thumbs-swiper", {
+      spaceBetween: 10,
+      slidesPerView: 3,
+      freeMode: true,
+      watchSlidesProgress: true,
+
+      modules: [FreeMode, Navigation, Thumbs],
+    });
+  };
+
+  const toggleFavoriteItem = (product_id) => {
+    const newFavorites = {
+      ...favorites,
+      [product_id]: !favorites[product_id],
+    };
+    localStorage.setItem("favorites", JSON.stringify(newFavorites));
+    setFavorites(newFavorites);
   };
 
   useEffect(() => {
     getProductDetail(id);
-  }, [id,getProductDetail]);
+  }, [id, getProductDetail]);
+
+  useEffect(() => {
+    if (product) {
+      initSwiper();
+    }
+  }, [product]);
+
+  useEffect(() => {
+    getCart();
+  }, [getCart]);
 
   return (
     <div className="container-fluid">
       <div className="container">
         <div className="row align-items-center">
           <div className="col-md-7">
-            <div
-              id="carouselExampleControls"
-              className="carousel slide"
-              data-ride="carousel"
-            >
-              <div className="carousel-inner">
-                <div className="carousel-item active">
+            <div className="swiper product-swiper">
+              <div className="swiper-wrapper">
+                <div className="swiper-slide">
                   <img
                     src={product.imageUrl}
                     className="d-block w-100"
-                    style={{ height: 400, objectFit: "cover" }}
                     alt={product.title}
                   />
                 </div>
-                <div className="carousel-item">
-                  <img
-                    src="https://images.unsplash.com/photo-1502743780242-f10d2ce370f3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1916&q=80"
-                    className="d-block w-100"
-                    alt="..."
-                  />
-                </div>
-                <div className="carousel-item">
-                  <img
-                    src="https://images.unsplash.com/photo-1502743780242-f10d2ce370f3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1916&q=80"
-                    className="d-block w-100"
-                    alt="..."
-                  />
-                </div>
+                {(product.imagesUrl !== undefined) && (product.imagesUrl?.[0] !== "")
+                  ? product.imagesUrl.map((imageUrl) => {
+                    return (
+                      <div key={imageUrl} className="swiper-slide">
+                        <img
+                          src={imageUrl}
+                          className="d-block w-100"
+                          alt=""
+                        />
+                      </div>
+                    );
+                  })
+                  : ""}
               </div>
-              <a
-                className="carousel-control-prev"
-                href="#carouselExampleControls"
-                role="button"
-                data-slide="prev"
-              >
-                <span
-                  className="carousel-control-prev-icon"
-                  aria-hidden="true"
-                ></span>
-                <span className="sr-only">Previous</span>
-              </a>
-              <a
-                className="carousel-control-next"
-                href="#carouselExampleControls"
-                role="button"
-                data-slide="next"
-              >
-                <span
-                  className="carousel-control-next-icon"
-                  aria-hidden="true"
-                ></span>
-                <span className="sr-only">Next</span>
-              </a>
+              <div className="swiper-pagination"></div>
+              <div className="swiper-button-next"></div>
+              <div className="swiper-button-prev"></div>
+            </div>
+            <div thumbsSlider="" className="swiper product-thumbs-swiper">
+              <div className="swiper-wrapper">
+                <div className="swiper-slide">
+                  <img
+                    src={product.imageUrl}
+                    className="d-block"
+                    alt={product.title}
+                  />
+                </div>
+                {product.imagesUrl !== undefined
+                  ? product.imagesUrl.map((imageUrl) => {
+                    return (
+                      <div key={imageUrl} className="swiper-slide">
+                        <img src={imageUrl} className="d-block" alt="" />
+                      </div>
+                    );
+                  })
+                  : ""}
+              </div>
+              <div className="swiper-pagination"></div>
             </div>
           </div>
           <div className="col-md-5">
@@ -150,12 +229,38 @@ export default function ProductDetailPage() {
                   </select>
                   <button
                     type="button"
-                    className="d-flex text-nowrap btn btn-brand-01 text-white w-50"
+                    className="d-flex text-nowrap btn btn-brand-01 text-white w-50 d-flex gap-1"
                     onClick={() => {
                       addCartItem(product.id, qtySelect);
                     }}
                   >
                     加入購物車
+                    {isLoading && (
+                      <ReactLoading
+                        type={"spin"}
+                        color={"#000"}
+                        height={"1.5rem"}
+                        width={"1.5rem"}
+                      />
+                    )}
+                  </button>
+                </div>
+                <div className="">
+                  <button
+                    type="button"
+                    className="btn btn-brand-01 d-flex align-items-center gap-1"
+                    style={{ backgroundColor: "transparent" }}
+                    onClick={() => {
+                      toggleFavoriteItem(product.id);
+                    }}
+                  >
+                    <i
+                      className={` bi ${
+                        favorites[product.id]
+                          ? "bi-heart-fill text-brand-01"
+                          : "bi-heart text-brand-01"
+                      } fs-5`}
+                    ></i> {favorites[product.id] ? "已加入我的最愛": "加入我的最愛"}
                   </button>
                 </div>
               </div>
@@ -324,6 +429,24 @@ export default function ProductDetailPage() {
             </div>
           </div>
         </div> */}
+        {isScreenLoading && (
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(255,255,255,0.3)",
+              zIndex: 999,
+            }}
+          >
+            <ReactLoading
+              type="spin"
+              color="black"
+              width="4rem"
+              height="4rem"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

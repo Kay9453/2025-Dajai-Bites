@@ -5,70 +5,62 @@ import { Modal } from "bootstrap";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
-function DelProductModal({ tempProduct, getProducts, isOpen, setIsOpen }) {
-  const delProductModalRef = useRef(null);
+function DelCouponModal({ tempCoupon, getCoupons, isOpen, setIsOpen }) {
+  const delCouponModalRef = useRef(null);
 
   useEffect(() => {
-    new Modal(delProductModalRef.current, {
+    new Modal(delCouponModalRef.current, {
       backdrop: false,
     });
   }, []);
 
   useEffect(() => {
     if (isOpen) {
-      const modalInstance = Modal.getInstance(delProductModalRef.current);
+      const modalInstance = Modal.getInstance(delCouponModalRef.current);
       modalInstance.show();
     }
   }, [isOpen]);
 
   const handleCloseDelProductModal = () => {
-    const modalInstance = Modal.getInstance(delProductModalRef.current);
+    const modalInstance = Modal.getInstance(delCouponModalRef.current);
     modalInstance.hide();
     setIsOpen(false);
   };
 
-  const deleteProduct = async () => {
+  const deleteCoupon = async () => {
     try {
       await axios.delete(
-        `${BASE_URL}/v2/api/${API_PATH}/admin/product/${tempProduct.id}`,
-        {
-          data: {
-            ...tempProduct,
-            origin_price: Number(tempProduct.origin_price),
-            price: Number(tempProduct.price),
-            is_enabled: tempProduct.is_enabled ? 1 : 0,
-          },
-        }
+        `${BASE_URL}/v2/api/${API_PATH}/admin/coupon/${tempCoupon.id}`
       );
     } catch (error) {
       console.error(error);
-      alert("刪除產品失敗!");
+      alert("刪除優惠券失敗!");
     }
   };
 
-  const handleDeleteProduct = async () => {
+  const handleDeleteCoupon = async () => {
     try {
-      await deleteProduct();
-      getProducts();
+      await deleteCoupon();
+      getCoupons();
       handleCloseDelProductModal();
     } catch (error) {
       console.error(error);
-      alert("刪除產品失敗");
+      alert("刪除優惠券失敗");
     }
   };
 
   return (
     <div
-      ref={delProductModalRef}
+      ref={delCouponModalRef}
       className="modal fade"
-      id="delProductModal"
+      id="delCouponModal"
       tabIndex="-1"
       style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
     >
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h1 className="modal-title fs-5">刪除產品</h1>
+            <h1 className="modal-title fs-5">刪除優惠券</h1>
             <button
               onClick={handleCloseDelProductModal}
               type="button"
@@ -79,7 +71,7 @@ function DelProductModal({ tempProduct, getProducts, isOpen, setIsOpen }) {
           </div>
           <div className="modal-body">
             你是否要刪除
-            <span className="text-danger fw-bold">{tempProduct.title}</span>
+            <span className="text-danger fw-bold">{tempCoupon.title}</span>
           </div>
           <div className="modal-footer">
             <button
@@ -90,7 +82,7 @@ function DelProductModal({ tempProduct, getProducts, isOpen, setIsOpen }) {
               取消
             </button>
             <button
-              onClick={handleDeleteProduct}
+              onClick={handleDeleteCoupon}
               type="button"
               className="btn btn-danger"
             >
@@ -103,4 +95,4 @@ function DelProductModal({ tempProduct, getProducts, isOpen, setIsOpen }) {
   );
 }
 
-export default DelProductModal;
+export default DelCouponModal;

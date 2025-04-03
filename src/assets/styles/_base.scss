@@ -1,94 +1,101 @@
 h1,h2,h3,h4,h5,h6{
-    font-weight: 700;
-    margin-bottom: 0;
+  font-weight: 700;
+  margin-bottom: 0;
 }
 p{
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 // Material ICON 樣式，預設填滿
 .material-symbols-outlined {
-    font-variation-settings:
-    'FILL' 1,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
 }
   
 .icon-unfilled {
-    font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
 }
 
 .btn-custom{
-    padding: 12px 32px;
-    border-radius: 40px;
+  padding: 12px 32px;
+  border-radius: 40px;
 }
 
 .btn-custom-sm{
-    padding: 8px 24px;
-    border-radius: 40px;
+  padding: 8px 24px;
+  border-radius: 40px;
 }
 
 .btn-filled{
+  color: white;
+  background-color: $brand-01;
+  border: 1px solid $brand-01;
+  &:hover{
     color: white;
-    background-color: $brand-01;
-    border: 1px solid $brand-01;
-    &:hover{
-        color: white;
-        background-color: $brand-02;
-        border: 1px solid $brand-02;
-    }
+    background-color: $brand-02;
+    border: 1px solid $brand-02;
+  }
 }
 
 .btn-outlined{
-    color: $brand-01;
-    background-color: white;
-    border: 1px solid $brand-01;
-    &:hover{
-        color: white;
-        background-color: $brand-01;
-    }
+  color: $brand-01;
+  background-color: white;
+  border: 1px solid $brand-01;
+  &:hover{
+      color: white;
+      background-color: $brand-01;
+  }
 }
 
 .w-content{
-    width: fit-content;
+  width: fit-content;
 }
 
 
 .mt-40{
-    margin-top: 40px;
+  margin-top: 40px;
 }
 
 .mb-8{
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .mb-12{
-    margin-bottom: 12px;
+  margin-bottom: 12px;
 }
 .mb-40{
-    margin-bottom: 40px;
+  margin-bottom: 40px;
 }
 
 @include media-breakpoint-up(lg) {
-    .mb-lg-40{
-        margin-bottom: 40px;
-    }
+  .mb-lg-40{
+      margin-bottom: 40px;
+  }
 }
 
 
 .pt-120{
-    padding-top: 120px;
+  padding-top: 120px;
 }
 
 .pb-120{
-    padding-bottom: 120px;
+  padding-bottom: 120px;
 }
 
 .border-16{
-    border-radius: 16px;
+  border-radius: 16px;
+}
+
+.add-fav-icon{
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  cursor: pointer;
 }

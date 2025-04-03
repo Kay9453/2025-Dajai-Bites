@@ -1,10 +1,7 @@
 import FrontLayout from "./layouts/FrontLayout";
 
 function App() {
-
-  return (
-      <FrontLayout />
-  )
+  return <FrontLayout />;
 }
 
-export default App
+export default App;

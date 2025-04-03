@@ -1,0 +1,93 @@
+.steps-bar{
+  margin: 32px 24px;
+  display: flex;
+  li{
+    color: $gray-500;
+    position: relative;
+    width: 25%;
+    font-weight: bold;
+    &::before{
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 8px;
+      top: 16px;
+      left: -50%;
+      z-index: -1;
+      background-color: $gray-500;
+    }
+    &:first-child::before{
+      content: none;
+    }
+  }
+  // .step-active::before{
+  //     background-color: $brand-01;
+  // }
+
+  .step-circle{
+    display: block;
+    background-color: white;
+    border: 2px solid $gray-500; 
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    color: $gray-500;
+  }
+
+  .step-active{
+    color: $brand-01;
+    &::before{
+      background-color: $brand-01;
+    }
+    .step-circle{
+      background-color: white;
+      border: 2px solid $brand-01; 
+      color: $brand-01; 
+    }
+  }
+
+  .step-done{
+    color: $brand-01;
+    &::before{
+      background-color: $brand-01;
+    }
+    .step-circle{
+      background-color: $brand-01;
+      border: 2px solid $brand-01; 
+      color: white;
+    }
+  }
+}
+
+// .step-circle{
+//     display: block;
+//     background-color: white;
+//     border: 2px solid $gray-500; 
+//     border-radius: 50%;
+//     width: 32px;
+//     height: 32px;
+//     color: $gray-500;
+//     &.step-circle-active{
+//         background-color: white;
+//         border: 2px solid $brand-01; 
+//         color: $brand-01; 
+//     }
+//     &.step-circle-done{
+//         background-color: $brand-01;
+//         border: 2px solid $brand-01; 
+//         color: white;
+    
+//     }
+// }
+
+// .step-text{
+//     color: $gray-500;
+// }
+
+// .step-text-active{
+//     color: $brand-01;
+// }
+
+// .step-text-done{
+//     color: $brand-01;
+// }

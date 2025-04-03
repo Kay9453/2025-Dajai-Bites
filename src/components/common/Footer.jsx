@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function Footer() {
   return (
     <>
-      <div className="bg-brand-03 py-5">
+      <div className="container-fluid bg-brand-03 py-5">
         <div className="container text-white">
           <div className="row">
             <div className="col-lg-6 col-12">
@@ -15,23 +15,6 @@ export default function Footer() {
                   <p className="mb-2">Copyright @ 2025 Search for Dajai Bites All rights reserved.</p>
                   <p>@ 2025 大家饒早，本網站僅為學習用途，不做任何商業使用。</p>
                 </div>
-                {/* <ul className="d-flex list-unstyled mb-0 h4">
-                  <li>
-                    <a href="#" className="text-white mx-3">
-                      <i className="fab fa-facebook"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-white mx-3">
-                      <i className="fab fa-instagram"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-white ms-3">
-                      <i className="fab fa-line"></i>
-                    </a>
-                  </li>
-                </ul> */}
               </div>
             </div>
             <div className="col-lg-3 col-12">
@@ -75,8 +58,8 @@ export default function Footer() {
               </div>
             </div>
             <div className="d-lg-none mt-4 text-center">
-              <p className="mb-2">Copyright @ 2025 Search for Dajai Bites All rights reserved.</p>
-              <p>@ 2025 大家饒早，本網站僅為學習用途，不做任何商業使用。</p>
+              <p className="mb-2 text-break">Copyright @ 2025 Search for Dajai Bites All rights reserved.</p>
+              <p className="text-break">@ 2025 大家饒早，本網站僅為學習用途，不做任何商業使用。</p>
             </div>  
           </div>
         </div>
