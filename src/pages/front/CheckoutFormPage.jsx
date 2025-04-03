@@ -116,21 +116,6 @@ export default function CheckoutFormPage() {
                 </div>
               );
             })}
-            {/* <div className="d-flex mt-2">
-              <img
-                src="https://images.unsplash.com/photo-1502743780242-f10d2ce370f3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1916&q=80"
-                alt=""
-                className="me-2"
-                style={{ width: "48px", height: "48px", objectFit: "cover" }}
-              />
-              <div className="w-100">
-                <div className="d-flex justify-content-between">
-                  <p className="mb-0 fw-bold">Lorem ipsum</p>
-                  <p className="mb-0">NT$12,000</p>
-                </div>
-                <p className="mb-0 fw-bold">x1</p>
-              </div>
-            </div> */}
             <table className="table mt-4 border-top border-bottom text-muted">
               <tbody>
                 <tr>
@@ -189,10 +174,6 @@ export default function CheckoutFormPage() {
                   }`}
                   id="contactName"
                   placeholder="請輸入真實姓名"
-                  // onChange={(e)=> {
-                  //   console.log(e.target.value)
-                  //   setValue("contactName", e.target.value,{ shouldValidate: true })
-                  // }}
                 />
                 {errors.contactName && (
                   <p className="text-danger my-2 ">
