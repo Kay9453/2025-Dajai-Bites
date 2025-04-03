@@ -8,9 +8,8 @@ export default function CheckoutFailPage() {
     >
       <div className="h-100 d-flex flex-column justify-content-center mt-4">
         <div className="d-flex flex-column gap-3 justify-content-center align-items-center">
-          {/* <span className="material-symbols-outlined icon-unfilled text-error fs-1">Cancel</span> */}
-          <img src="checkout-fail.png" className="" alt="付款失敗" />
-          <h3 className="fs-2 text-error">付款失敗</h3>
+          <img src="checkout-fail.png" className="" alt="訂單建立失敗" />
+          <h3 className="fs-2 text-error">訂單建立失敗</h3>
           <p className="text-md-20"></p>
         </div>
         <div className="d-flex justify-content-center gap-3 mt-4 mt-lg-5 mb-5 mb-lg-60">
