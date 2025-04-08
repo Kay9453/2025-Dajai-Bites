@@ -63,19 +63,28 @@ function CouponModal({
           is_enabled: modalData.is_enabled ? 1 : 0,
         },
       });
-      //   handleCloseProductModal();
+      handleCloseCouponModal();
       Toast.fire({
         icon: "success",
         title: "新增優惠券成功!",
       });
     } catch (error) {
       console.error(error);
-      Swal.fire({
-        title: "新增優惠券失敗",
-        text: "請重新操作一次",
-        icon: "error",
-        confirmButtonText: "確定"
-      });
+      if (error.status === 400){
+        Swal.fire({
+          title: "新增優惠券失敗",
+          text: error.response.data.message.join("、"),
+          icon: "error",
+          confirmButtonText: "確定"
+        });
+      } else {
+        Swal.fire({
+          title: "新增優惠券失敗",
+          text: "請重新操作一次",
+          icon: "error",
+          confirmButtonText: "確定"
+        });
+      }
       // alert("新增優惠券失敗!");
     }
   };
@@ -93,18 +102,28 @@ function CouponModal({
           },
         }
       );
+      handleCloseCouponModal();
       Toast.fire({
         icon: "success",
         title: "更新優惠券成功!",
       });
     } catch (error) {
       console.error(error);
-      Swal.fire({
-        title: "編輯優惠券失敗",
-        text: "請重新操作一次",
-        icon: "error",
-        confirmButtonText: "確定"
-      });
+      if (error.status === 400){
+        Swal.fire({
+          title: "編輯優惠券失敗",
+          text: error.response.data.message.join("、"),
+          icon: "error",
+          confirmButtonText: "確定"
+        });
+      } else {
+        Swal.fire({
+          title: "編輯優惠券失敗",
+          text: "請重新操作一次",
+          icon: "error",
+          confirmButtonText: "確定"
+        });
+      }
       // alert("編輯優惠券失敗!");
     }
   };
@@ -114,7 +133,7 @@ function CouponModal({
     try {
       await apiCall();
       getCoupons();
-      handleCloseCouponModal();
+      // handleCloseCouponModal();
     } catch (error) {
       console.error(error);
       alert("更新優惠券失敗!");

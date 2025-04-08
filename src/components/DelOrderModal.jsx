@@ -83,7 +83,7 @@ function DelOrderModal({ tempOrder, getOrders, isOpen, setIsOpen }) {
           </div>
           <div className="modal-body">
             你是否要刪除
-            <span className="text-danger fw-bold">{tempOrder.title}</span>
+            <span className="text-danger fw-bold">{tempOrder.id}</span>
           </div>
           <div className="modal-footer">
             <button

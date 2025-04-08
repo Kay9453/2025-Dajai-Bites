@@ -17,7 +17,7 @@ export default function AboutPage() {
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb article-breadcrumb">
             <li className="breadcrumb-item">
-              <a href="index.html">首頁</a>
+              <Link to="/">首頁</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               關於我們
@@ -61,7 +61,7 @@ export default function AboutPage() {
               </div>
             </div>
           </div>
-
+          
           <div className="card mb-3 border-0" data-aos="fade-left">
             <div className="row flex-md-row-reverse">
               <div className="col-md-6">
