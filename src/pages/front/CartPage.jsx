@@ -1,23 +1,28 @@
 import axios from "axios";
 import Toast from "../../components/Toast";
 import { useCallback, useEffect, useRef, useState } from "react";
-import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updateCartData } from "../../redux/cartSlice";
+import Swal from "sweetalert2";
 
 import Swiper from "swiper";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import ProgressBar from "../../components/ProgressBar";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_PATH = import.meta.env.VITE_API_PATH;
+
 export default function CartPage() {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const API_PATH = import.meta.env.VITE_API_PATH;
 
   const [cart, setCart] = useState({}); //儲存購物車列表
   const [products, setProducts] = useState([]);
   const [coupon,setCoupon] = useState("");
 
   const swiperRef = useRef();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (products.length > 0) {
@@ -28,9 +33,13 @@ export default function CartPage() {
           delay: 2500,
           disableOnInteraction: false,
         },
-        slidesPerView: 2,
+        slidesPerView: 1,
         spaceBetween: 10,
         breakpoints: {
+          575: {
+            slidesPerView: 2,
+            spaceBetween: 10,
+          },
           767: {
             slidesPerView: 3,
             spaceBetween: 30,
@@ -49,20 +58,19 @@ export default function CartPage() {
     } catch (error) {
       console.error(error);
     }
-  }, [BASE_URL, API_PATH]);
+  }, []);
 
   // 取得購物車
   const getCart = useCallback(async () => {
     try {
       const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/cart`);
-      console.log("購物車裡的東西",res.data.data);
-      
       setCart(res.data.data);
+      dispatch(updateCartData(res.data.data));      
     } catch (error) {
       console.error(error);
       alert("取得購物車列表失敗");
     }
-  }, [BASE_URL, API_PATH]);
+  }, [dispatch]);
 
   // 清空購物車
   const removeCart = async () => {
@@ -155,7 +163,100 @@ export default function CartPage() {
           <h3 className="mt-3 mb-4">購物車</h3>
           <div className="row">
             <div className="col-md-8">
-              <table className="table">
+              <div className="d-lg-none">
+                {cart.carts?.length === 0 ? (
+                  <div className="d-flex flex-column align-items-center gap-2 pt-3">
+                    購物車裡沒有東西
+                    <Link
+                      to="/products"
+                      className="btn btn-filled w-content"
+                    >
+                      去逛逛
+                    </Link>
+                  </div>      
+                ) : (
+                  cart.carts?.map((cartItem) => {
+                    return(
+                      <div key={cartItem.id} className="d-flex border-top border-bottom py-3 gap-lg-3">
+                        <div className="d-flex align-items-center">
+                          <button
+                            onClick={() => {
+                              removeCartItem(cartItem.id);
+                            }}
+                            className="btn btn-outline-dark border-0 py-2"
+                            type="button"
+                            id="button-addon2"
+                          >
+                            <i className="bi bi-x-lg"></i>
+                          </button>
+                        </div>
+                        <div className="d-flex gap-3 w-100">
+                          <div className="img-crop-100">
+                            <img 
+                              src={cartItem.product.imageUrl}
+                              alt={cartItem.product.title} 
+                              className="img-inner" />
+                          </div>
+                          <div className="d-flex flex-column justify-content-center w-100">
+                            <p className="fw-bold">{cartItem.product.title}</p>
+                            <div className="d-flex justify-content-between align-items-center">
+                              <p className="mb-0 text-nowrap">
+                                NT${cartItem.total?.toLocaleString()}
+                              </p>
+                              <div className="input-group w-content">
+                                <div className="input-group-prepend">
+                                  <button
+                                    className="btn btn-outline-dark border-0 py-2"
+                                    type="button"
+                                    id="button-addon1"
+                                    onClick={() => {
+                                      updateCartItem(
+                                        cartItem.id,
+                                        cartItem.product_id,
+                                        cartItem.qty - 1
+                                      );
+                                    }}
+                                    disabled={cartItem.qty === 1}
+                                  >
+                                    <i className="bi bi-dash-lg"></i>
+                                  </button>
+                                </div>
+                                <input
+                                  type="text"
+                                  className="form-control border-0 text-center my-auto shadow-none"
+                                  style={{width: 44}}
+                                  placeholder=""
+                                  aria-label="Example text with button addon"
+                                  aria-describedby="button-addon1"
+                                  value={cartItem.qty}
+                                  readOnly
+                                />
+                                <div className="input-group-append">
+                                  <button
+                                    className="btn btn-outline-dark border-0 py-2"
+                                    type="button"
+                                    id="button-addon2"
+                                    onClick={() => {
+                                      updateCartItem(
+                                        cartItem.id,
+                                        cartItem.product_id,
+                                        cartItem.qty + 1
+                                      );
+                                    }}
+                                  >
+                                    <i className="bi bi-plus-lg"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })
+                )}
+              </div>
+              <table className="table d-none d-lg-table">
                 <thead>
                   <tr>
                     <th scope="col" className="border-0 ps-0">
@@ -203,13 +304,14 @@ export default function CartPage() {
                                 objectFit: "cover",
                               }}
                             />
-                            <p className="mb-0 fw-bold ms-3 d-inline-block">
+                            <p className="mb-0 fw-bold ms-3 d-inline-block" data-label="品項">
                               {cartItem.product.title}
                             </p>
                           </th>
                           <td
                             className="border-0 align-middle"
                             style={{ maxWidth: "160px" }}
+                            data-label="數量"
                           >
                             <div className="input-group pe-5">
                               <div className="input-group-prepend">
@@ -256,7 +358,7 @@ export default function CartPage() {
                               </div>
                             </div>
                           </td>
-                          <td className="border-0 align-middle">
+                          <td className="border-0 align-middle" data-label="金額">
                             <p className="mb-0 ms-auto">
                               NT${cartItem.total?.toLocaleString()}
                             </p>
@@ -375,7 +477,7 @@ export default function CartPage() {
                           src={product.imageUrl}
                           className="card-img-top rounded-0"
                           alt={product.title}
-                          style={{ height: 277, objectFit: "cover" }}
+                          style={{ height: 275, objectFit: "cover" }}
                         />
                         <Link to="/" className="text-dark"></Link>
                         <div className="card-body p-0">

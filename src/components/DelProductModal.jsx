@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import axios from "axios";
 import { Modal } from "bootstrap";
+import Swal from "sweetalert2";
+import Toast from "../components/Toast";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -40,9 +42,19 @@ function DelProductModal({ tempProduct, getProducts, isOpen, setIsOpen }) {
           },
         }
       );
+      Toast.fire({
+        icon: "success",
+        title: "刪除產品成功!",
+      });
     } catch (error) {
       console.error(error);
-      alert("刪除產品失敗!");
+      // alert("刪除產品失敗!");
+      Swal.fire({
+        title: "刪除產品失敗",
+        text: "請重新操作一次",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
     }
   };
 

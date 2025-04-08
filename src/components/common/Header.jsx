@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { updateCartData } from "../../redux/cartSlice";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_PATH = import.meta.env.VITE_API_PATH;
+
 export default function Header() {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const API_PATH = import.meta.env.VITE_API_PATH;
 
   const routes = [
     { path: "/about", name: "關於我們", icon: "menu_book" },
@@ -51,7 +52,7 @@ export default function Header() {
       console.error(error);
       alert("取得購物車列表失敗");
     }
-  }, [BASE_URL, API_PATH,dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     getCart();

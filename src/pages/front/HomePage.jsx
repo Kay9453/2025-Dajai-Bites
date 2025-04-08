@@ -8,9 +8,10 @@ import AOS from 'aos';
 import 'aos/dist/aos.css'; 
 AOS.init();
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_PATH = import.meta.env.VITE_API_PATH;
+
 export default function HomePage() {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const API_PATH = import.meta.env.VITE_API_PATH;
 
   const [products, setProducts] = useState([]);
 
@@ -32,7 +33,7 @@ export default function HomePage() {
     } catch (error) {
       console.error(error);
     }
-  }, [BASE_URL, API_PATH]);
+  }, []);
 
   // 取得購物車
   const getCart = useCallback(async () => {
@@ -45,7 +46,7 @@ export default function HomePage() {
       console.error(error);
       alert("取得購物車列表失敗");
     }
-  }, [BASE_URL, API_PATH,dispatch]);
+  }, [dispatch]);
 
   // 加入購物車
   const addCartItem = async (product_id, qty) => {
@@ -68,21 +69,32 @@ export default function HomePage() {
   };
 
   const toggleFavoriteItem = (product_id) => {
+    const isFavorited = !favorites[product_id];
     const newFavorites = {
       ...favorites,
-      [product_id]: !favorites[product_id],
+      [product_id]: isFavorited,
     };
     localStorage.setItem("favorites", JSON.stringify(newFavorites));
     setFavorites(newFavorites);
+    if (isFavorited) {
+      Toast.fire({
+        icon: "success",
+        title: "已加入我的最愛",
+      });
+    } else {
+      Toast.fire({
+        icon: "success",
+        title: "已移除我的最愛",
+      });
+    }
   };
 
   useEffect(() => {
     getProducts();
-    getCart();
-  }, [getProducts,getCart]);
+  }, [getProducts]);
 
   return (
-    <div className="container-fluid px-0">
+    <div className="container-fluid">
       <div
         className="w-100 position-absolute"
         style={{
@@ -124,8 +136,8 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="container-fluid sec-features px-0">
-        <div className="container">
+      <div className="container-fluid sec-features">
+        <div className="container-fluid">
           <div className="text-center pt-120">
             <h2 className="fs-1 text-brand-03">商品特色</h2>
             <p className="fs-4 text-brand-04 mt-3">Features</p>
@@ -185,10 +197,10 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="bg-light">
+      <div className="container-fluid bg-light bg-recommended">
         <div className="container sec-recommended">
           <div className="pt-120 d-flex justify-content-between align-items-center mb-5">
-            <div className="d-flex gap-3 align-items-center">
+            <div className="d-flex flex-md-row gap-3 align-items-md-center flex-column ">
               <h2 className="fs-1 text-brand-03">熱銷推薦</h2>
               <p className="fs-4 text-brand-04">Recommended</p>
             </div>
@@ -249,7 +261,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="bg-brand-05">
+      <div className="container-fluid bg-brand-05 bg-qa">
         <div className="container pb-120">
           <div className="text-center pt-120">
             <h2 className="fs-1 text-brand-03">常見問題</h2>

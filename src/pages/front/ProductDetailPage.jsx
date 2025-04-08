@@ -11,9 +11,10 @@ import { useDispatch } from "react-redux";
 import { updateCartData } from "../../redux/cartSlice";
 import Toast from "../../components/Toast";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_PATH = import.meta.env.VITE_API_PATH;
+
 export default function ProductDetailPage() {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const API_PATH = import.meta.env.VITE_API_PATH;
 
   const { id } = useParams();
 
@@ -47,7 +48,7 @@ export default function ProductDetailPage() {
         setIsScreenLoading(false);
       }
     },
-    [BASE_URL, API_PATH]
+    []
   );
 
   // 加入購物車
@@ -84,7 +85,7 @@ export default function ProductDetailPage() {
       console.error(error);
       alert("取得購物車列表失敗");
     }
-  }, [BASE_URL, API_PATH,dispatch]);
+  }, [dispatch]);
 
   const initSwiper = () => {
     new Swiper(".product-swiper", {
@@ -110,12 +111,25 @@ export default function ProductDetailPage() {
   };
 
   const toggleFavoriteItem = (product_id) => {
+    const isFavorited = !favorites[product_id];
     const newFavorites = {
       ...favorites,
-      [product_id]: !favorites[product_id],
+      [product_id]: isFavorited,
     };
     localStorage.setItem("favorites", JSON.stringify(newFavorites));
     setFavorites(newFavorites);
+
+    if (isFavorited) {
+      Toast.fire({
+        icon: "success",
+        title: "已加入我的最愛",
+      });
+    } else {
+      Toast.fire({
+        icon: "success",
+        title: "已移除我的最愛",
+      });
+    }
   };
 
   useEffect(() => {
@@ -128,16 +142,12 @@ export default function ProductDetailPage() {
     }
   }, [product]);
 
-  useEffect(() => {
-    getCart();
-  }, [getCart]);
-
   return (
     <div className="container-fluid">
       <div className="container">
         <div className="row align-items-center">
           <div className="col-md-7">
-            <div className="swiper product-swiper">
+            <div className="swiper product-swiper mb-2">
               <div className="swiper-wrapper">
                 <div className="swiper-slide">
                   <img
@@ -164,7 +174,7 @@ export default function ProductDetailPage() {
               <div className="swiper-button-next"></div>
               <div className="swiper-button-prev"></div>
             </div>
-            <div thumbsSlider="" className="swiper product-thumbs-swiper">
+            <div className="swiper product-thumbs-swiper">
               <div className="swiper-wrapper">
                 <div className="swiper-slide">
                   <img
@@ -313,122 +323,6 @@ export default function ProductDetailPage() {
             </table>
           </div>
         </div>
-
-        {/* <h3 className="fw-bold">猜你喜歡</h3>
-        <div className="swiper mt-4 mb-5">
-          <div className="swiper-wrapper">
-            <div className="swiper-slide">
-              <div className="card border-0 mb-4 position-relative position-relative">
-                <img
-                  src="https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"
-                  className="card-img-top rounded-0"
-                  alt="..."
-                />
-                <a href="#" className="text-dark"></a>
-                <div className="card-body p-0">
-                  <h4 className="mb-0 mt-3">
-                    <a href="#">Lorem ipsum</a>
-                  </h4>
-                  <p className="card-text mb-0">
-                    NT$1,080
-                    <span className="text-muted ">
-                      <del>NT$1,200</del>
-                    </span>
-                  </p>
-                  <p className="text-muted mt-3"></p>
-                </div>
-              </div>
-            </div>
-            <div className="swiper-slide">
-              <div className="card border-0 mb-4 position-relative position-relative">
-                <img
-                  src="https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"
-                  className="card-img-top rounded-0"
-                  alt="..."
-                />
-                <a href="#" className="text-dark"></a>
-                <div className="card-body p-0">
-                  <h4 className="mb-0 mt-3">
-                    <a href="#">Lorem ipsum</a>
-                  </h4>
-                  <p className="card-text mb-0">
-                    NT$1,080
-                    <span className="text-muted ">
-                      <del>NT$1,200</del>
-                    </span>
-                  </p>
-                  <p className="text-muted mt-3"></p>
-                </div>
-              </div>
-            </div>
-            <div className="swiper-slide">
-              <div className="card border-0 mb-4 position-relative position-relative">
-                <img
-                  src="https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"
-                  className="card-img-top rounded-0"
-                  alt="..."
-                />
-                <a href="#" className="text-dark"></a>
-                <div className="card-body p-0">
-                  <h4 className="mb-0 mt-3">
-                    <a href="#">Lorem ipsum</a>
-                  </h4>
-                  <p className="card-text mb-0">
-                    NT$1,080
-                    <span className="text-muted ">
-                      <del>NT$1,200</del>
-                    </span>
-                  </p>
-                  <p className="text-muted mt-3"></p>
-                </div>
-              </div>
-            </div>
-            <div className="swiper-slide">
-              <div className="card border-0 mb-4 position-relative position-relative">
-                <img
-                  src="https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"
-                  className="card-img-top rounded-0"
-                  alt="..."
-                />
-                <a href="#" className="text-dark"></a>
-                <div className="card-body p-0">
-                  <h4 className="mb-0 mt-3">
-                    <a href="#">Lorem ipsum</a>
-                  </h4>
-                  <p className="card-text mb-0">
-                    NT$1,080
-                    <span className="text-muted ">
-                      <del>NT$1,200</del>
-                    </span>
-                  </p>
-                  <p className="text-muted mt-3"></p>
-                </div>
-              </div>
-            </div>
-            <div className="swiper-slide">
-              <div className="card border-0 mb-4 position-relative position-relative">
-                <img
-                  src="https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"
-                  className="card-img-top rounded-0"
-                  alt="..."
-                />
-                <a href="#" className="text-dark"></a>
-                <div className="card-body p-0">
-                  <h4 className="mb-0 mt-3">
-                    <a href="#">Lorem ipsum</a>
-                  </h4>
-                  <p className="card-text mb-0">
-                    NT$1,080
-                    <span className="text-muted ">
-                      <del>NT$1,200</del>
-                    </span>
-                  </p>
-                  <p className="text-muted mt-3"></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
         {isScreenLoading && (
           <div
             className="d-flex justify-content-center align-items-center"

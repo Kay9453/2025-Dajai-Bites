@@ -1,10 +1,36 @@
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updateCartData } from "../../redux/cartSlice";
+import { useCallback, useEffect } from "react";
 import ProgressBar from "../../components/ProgressBar";
+import axios from "axios";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_PATH = import.meta.env.VITE_API_PATH;
 
 export default function CheckoutSuccessPage() {
+
+  const dispatch = useDispatch();
+
+  // 取得購物車
+  const getCart = useCallback(async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/cart`);
+      // setCart(res.data.data);
+      dispatch(updateCartData(res.data.data));      
+    } catch (error) {
+      console.error(error);
+      alert("取得購物車列表失敗");
+    }
+  }, [dispatch]);
+
+  useEffect(()=>{
+    getCart();
+  },[getCart])
+
   return (
     <div className="container">
-      <ProgressBar currentStep={5} />
+      <ProgressBar currentStep={4} />
       <div className="d-flex justify-content-center align-items-center">
         <div className="d-flex flex-column justify-content-center">
           <div className="d-flex flex-column gap-3 justify-content-center align-items-center">

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Modal } from "bootstrap";
+import Toast from "../components/Toast";
+import Swal from "sweetalert2";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -62,15 +64,24 @@ function CouponModal({
         },
       });
       //   handleCloseProductModal();
+      Toast.fire({
+        icon: "success",
+        title: "新增優惠券成功!",
+      });
     } catch (error) {
       console.error(error);
-      alert("新增優惠券失敗!");
+      Swal.fire({
+        title: "新增優惠券失敗",
+        text: "請重新操作一次",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
+      // alert("新增優惠券失敗!");
     }
   };
 
   const updateCoupon = async () => {
     try {
-      
       await axios.put(
         `${BASE_URL}/v2/api/${API_PATH}/admin/coupon/${modalData.id}`,
         {
@@ -82,9 +93,19 @@ function CouponModal({
           },
         }
       );
+      Toast.fire({
+        icon: "success",
+        title: "更新優惠券成功!",
+      });
     } catch (error) {
       console.error(error);
-      alert("編輯優惠券失敗!");
+      Swal.fire({
+        title: "編輯優惠券失敗",
+        text: "請重新操作一次",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
+      // alert("編輯優惠券失敗!");
     }
   };
 

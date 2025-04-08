@@ -35,6 +35,7 @@ export default function AdminCouponPage() {
       );
       setCoupons(res.data.coupons);
       setPageInfo(res.data.pagination);
+      
     } catch (error) {
       console.error(error);
       alert("取得優惠券失敗");

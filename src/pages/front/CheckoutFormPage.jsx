@@ -5,9 +5,10 @@ import Toast from "../../components/Toast";
 import { useCallback, useEffect, useState } from "react";
 import ProgressBar from "../../components/ProgressBar";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_PATH = import.meta.env.VITE_API_PATH;
+
 export default function CheckoutFormPage() {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const API_PATH = import.meta.env.VITE_API_PATH;
 
   const [cart, setCart] = useState({}); //儲存購物車列表
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function CheckoutFormPage() {
       console.error(error);
       alert("取得購物車列表失敗");
     }
-  }, [API_PATH, BASE_URL]);
+  }, []);
 
   useEffect(() => {
     getCart();
@@ -219,7 +220,7 @@ export default function CheckoutFormPage() {
                       message: "電話欄位格式錯誤",
                     },
                   })}
-                  type="number"
+                  type="tel"
                   className={`form-control ${
                     errors.contactPhone && "is-invalid"
                   }`}
@@ -466,14 +467,14 @@ export default function CheckoutFormPage() {
               </div>
             </div>
           </form>
-          <div className="d-flex flex-column-reverse flex-md-row mt-4 justify-content-between align-items-md-center align-items-end w-100">
-            <Link to="/cart" className="btn btn-custom btn-outlined w-50">
+          <div className="d-flex flex-column-reverse flex-md-row mt-4 gap-3 justify-content-between align-items-md-center align-items-end w-100">
+            <Link to="/cart" className="btn btn-custom btn-outlined w-100">
               <i className="bi bi-arrow-left me-2"></i> 上一步
             </Link>
             <button
               type="submit"
               form="checkoutForm"
-              className="btn btn-custom btn-filled w-50"
+              className="btn btn-custom btn-filled w-100"
               disabled={cart.carts?.length === 0 && true}
             >
               結帳

@@ -32,15 +32,19 @@ const defaultModalState = {
 };
 
 export default function AdminProductPage() {
+  
   const [products, setProducts] = useState([]);
+  const [tempProduct, setTempProduct] = useState(defaultModalState);
 
   const [modalMode, setModalMode] = useState(null);
 
   const [isProductModalOpen, setIsProductModalOpen] = useState(false); //控制 productModal 開關
   const [isDelProductModalOpen, setIsDelProductModalOpen] = useState(false); //控制 DelProductModal 開關
-
+  
   const [isScreenLoading, setIsScreenLoading] = useState(false); //儲存全螢幕 Loading 狀態
-
+  
+  const [pageInfo, setPageInfo] = useState({}); //儲存頁面資訊
+  
   const navigate = useNavigate();
 
   const getProducts = async (page = 1) => {
@@ -50,7 +54,6 @@ export default function AdminProductPage() {
         `${BASE_URL}/v2/api/${API_PATH}/admin/products?page=${page}`
       );
       setProducts(res.data.products);
-      console.log(res.data.products)
       setPageInfo(res.data.pagination);
     } catch (error) {
       console.error(error);
@@ -80,7 +83,7 @@ export default function AdminProductPage() {
 
     switch (mode) {
     case "create":
-      setTempProduct(defaultModalState);
+      setTempProduct({...defaultModalState});
       break;
     case "edit":
       setTempProduct({
@@ -99,10 +102,6 @@ export default function AdminProductPage() {
     setTempProduct(product);
     setIsDelProductModalOpen(true);
   };
-
-  const [tempProduct, setTempProduct] = useState(defaultModalState);
-
-  const [pageInfo, setPageInfo] = useState({}); //儲存頁面資訊
 
   const handlePageChange = (page) => {
     getProducts(page);

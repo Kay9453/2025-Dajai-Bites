@@ -6,9 +6,10 @@ import Toast from "../../components/Toast";
 import { useDispatch } from "react-redux";
 import { updateCartData } from "../../redux/cartSlice";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_PATH = import.meta.env.VITE_API_PATH;
+
 export default function ProductsPage() {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const API_PATH = import.meta.env.VITE_API_PATH;
 
   const [isScreenLoading, setIsScreenLoading] = useState(false); //儲存全螢幕 Loading 狀態
   const [isLoading, setIsLoading] = useState(false); //儲存小 Loading 狀態
@@ -41,7 +42,7 @@ export default function ProductsPage() {
     } finally {
       setIsScreenLoading(false);
     }
-  }, [API_PATH, BASE_URL]);
+  }, []);
 
   // 取得分類
   const getCategory = (products) => {
@@ -81,27 +82,38 @@ export default function ProductsPage() {
       const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/cart`);
 
       dispatch(updateCartData(res.data.data));
-      // console.log("購物車資料",res.data.data);
       // setCart(res.data.data);
     } catch (error) {
       console.error(error);
       alert("取得購物車列表失敗");
     }
-  }, [BASE_URL, API_PATH,dispatch]);
+  }, [dispatch]);
 
   const toggleFavoriteItem = (product_id) => {
+    const isFavorited = !favorites[product_id];
     const newFavorites = {
       ...favorites,
-      [product_id]: !favorites[product_id],
+      [product_id]: isFavorited,
     };
     localStorage.setItem("favorites", JSON.stringify(newFavorites));
     setFavorites(newFavorites);
+
+    if (isFavorited) {
+      Toast.fire({
+        icon: "success",
+        title: "已加入我的最愛",
+      });
+    } else {
+      Toast.fire({
+        icon: "success",
+        title: "已移除我的最愛",
+      });
+    }
   };
 
   useEffect(() => {
     getProducts();
-    getCart();
-  }, [getProducts, getCart]);
+  }, [getProducts]);
 
   return (
     <div className="container-fluid">
@@ -249,35 +261,6 @@ export default function ProductsPage() {
                   );
                 })}
             </div>
-            {/* <nav className="d-flex justify-content-center">
-              <ul className="pagination">
-                <li className="page-item">
-                  <a className="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li className="page-item active">
-                  <a className="page-link" href="#">
-                    1
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    2
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    3
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-              </ul>
-            </nav> */}
             {isScreenLoading && (
               <div
                 className="d-flex justify-content-center align-items-center"

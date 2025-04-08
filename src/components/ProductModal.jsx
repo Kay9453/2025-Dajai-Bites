@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Modal } from "bootstrap";
+import Swal from "sweetalert2";
+import Toast from "../components/Toast";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -38,6 +40,8 @@ function ProductModal({
   }, [isOpen]);
 
   const handleCloseProductModal = () => {
+    console.log("關閉視窗");
+    
     const modalInstance = Modal.getInstance(productModalRef.current);
     modalInstance.hide();
     setIsOpen(false);
@@ -106,10 +110,29 @@ function ProductModal({
           is_enabled: modalData.is_enabled ? 1 : 0,
         },
       });
-      //   handleCloseProductModal();
+      handleCloseProductModal();
+      Toast.fire({
+        icon: "success",
+        title: "新增產品成功!",
+      });
     } catch (error) {
       console.error(error);
-      alert("新增產品失敗!");
+      // alert("新增產品失敗!");
+      if (error.status === 400){
+        Swal.fire({
+          title: "新增產品失敗",
+          text: error.response.data.message.join("、"),
+          icon: "error",
+          confirmButtonText: "確定"
+        });
+      } else {
+        Swal.fire({
+          title: "新增產品失敗",
+          text: "請重新操作一次",
+          icon: "error",
+          confirmButtonText: "確定"
+        });
+      }
     }
   };
 
@@ -126,9 +149,29 @@ function ProductModal({
           },
         }
       );
+      handleCloseProductModal();
+      Toast.fire({
+        icon: "success",
+        title: "編輯產品成功!",
+      });
     } catch (error) {
       console.error(error);
-      alert("編輯產品失敗!");
+      // alert("編輯產品失敗!");
+      if (error.status === 400){
+        Swal.fire({
+          title: "編輯產品失敗",
+          text: error.response.data.message.join("、"),
+          icon: "error",
+          confirmButtonText: "確定"
+        });
+      } else {
+        Swal.fire({
+          title: "編輯產品失敗",
+          text: "請重新操作一次",
+          icon: "error",
+          confirmButtonText: "確定"
+        });
+      }
     }
   };
 
@@ -137,7 +180,9 @@ function ProductModal({
     try {
       await apiCall();
       getProducts();
-      handleCloseProductModal();
+      // handleCloseProductModal();
+      console.log("handle");
+      
     } catch (error) {
       console.error(error);
       alert("更新產品失敗!");
