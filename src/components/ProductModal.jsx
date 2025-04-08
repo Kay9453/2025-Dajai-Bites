@@ -40,8 +40,6 @@ function ProductModal({
   }, [isOpen]);
 
   const handleCloseProductModal = () => {
-    console.log("關閉視窗");
-    
     const modalInstance = Modal.getInstance(productModalRef.current);
     modalInstance.hide();
     setIsOpen(false);
@@ -181,8 +179,6 @@ function ProductModal({
       await apiCall();
       getProducts();
       // handleCloseProductModal();
-      console.log("handle");
-      
     } catch (error) {
       console.error(error);
       alert("更新產品失敗!");
