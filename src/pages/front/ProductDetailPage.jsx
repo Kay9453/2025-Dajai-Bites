@@ -1,7 +1,7 @@
 import axios from "axios";
 import Swiper from "swiper";
 import ReactLoading from "react-loading";
-import { FreeMode, Navigation, Pagination, Thumbs } from "swiper/modules";
+import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";

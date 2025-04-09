@@ -342,7 +342,7 @@ export default function CheckoutFormPage() {
                           className={`form-control ${
                             errors.cardNumber && "is-invalid"
                           }`} 
-                          id="cardNumber" inputmode="numeric" placeholder="請輸入卡號"/>
+                          id="cardNumber" inputMode="numeric" placeholder="請輸入卡號"/>
                         {errors.cardNumber && (
                           <p className="text-danger my-2 ">
                             {errors.cardNumber.message}
