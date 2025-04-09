@@ -6,6 +6,14 @@ p{
   margin-bottom: 0;
 }
 
+@font-face {
+  font-family: "Gensen Rounded";
+  src: url("/font/GenSenRounded2TW-M.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 // Material ICON 樣式，預設填滿
 .material-symbols-outlined {
   font-variation-settings:
