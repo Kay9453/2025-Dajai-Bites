@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 function Pagination({ pageInfo, handlePageChange }) {
   return (
@@ -53,3 +54,9 @@ function Pagination({ pageInfo, handlePageChange }) {
 }
 
 export default Pagination;
+
+Pagination.propTypes = {
+  pageInfo: PropTypes.object.isRequired, 
+  handlePageChange: PropTypes.func.isRequired
+}
+

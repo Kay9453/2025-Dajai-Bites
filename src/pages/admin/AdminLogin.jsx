@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -35,7 +36,13 @@ export default function AdminLogin() {
       navigate("/admin");
     } catch (error) {
       console.error(error);
-      alert("登入失敗");
+      Swal.fire({
+        title: "登入失敗",
+        text: "請重新登入",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
+      // alert("登入失敗");
     }
   };
 

@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { updateCartData } from "../../redux/cartSlice";
 import AOS from 'aos';
 import 'aos/dist/aos.css'; 
+import Swal from "sweetalert2";
 AOS.init();
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -44,7 +45,12 @@ export default function HomePage() {
       // setCart(res.data.data);
     } catch (error) {
       console.error(error);
-      alert("取得購物車列表失敗");
+      // alert("取得購物車列表失敗");
+      Swal.fire({
+        title: "取得購物車列表失敗",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
     }
   }, [dispatch]);
 
@@ -64,7 +70,13 @@ export default function HomePage() {
       });
     } catch (error) {
       console.error(error);
-      alert("加入購物車失敗!");
+      // alert("加入購物車失敗!");
+      Swal.fire({
+        title: "加入購物車失敗",
+        text: "請重新操作一次",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
     }
   };
 
@@ -136,8 +148,8 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="container-fluid sec-features">
-        <div className="container-fluid">
+      <div className="sec-features">
+        <div className="container">
           <div className="text-center pt-120">
             <h2 className="fs-1 text-brand-03">商品特色</h2>
             <p className="fs-4 text-brand-04 mt-3">Features</p>
@@ -197,7 +209,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="container-fluid bg-light bg-recommended">
+      <div className="bg-light bg-recommended">
         <div className="container sec-recommended">
           <div className="pt-120 d-flex justify-content-between align-items-center mb-5">
             <div className="d-flex flex-md-row gap-3 align-items-md-center flex-column ">
@@ -261,7 +273,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="container-fluid bg-brand-05 bg-qa">
+      <div className="bg-brand-05 bg-qa">
         <div className="container pb-120">
           <div className="text-center pt-120">
             <h2 className="fs-1 text-brand-03">常見問題</h2>

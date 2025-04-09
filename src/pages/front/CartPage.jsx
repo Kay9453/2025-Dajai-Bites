@@ -68,7 +68,12 @@ export default function CartPage() {
       dispatch(updateCartData(res.data.data));      
     } catch (error) {
       console.error(error);
-      alert("取得購物車列表失敗");
+      // alert("取得購物車列表失敗");
+      Swal.fire({
+        title: "取得購物車列表失敗",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
     }
   }, [dispatch]);
 
@@ -94,7 +99,13 @@ export default function CartPage() {
         });
       } catch (error) {
         console.error(error);
-        alert("清空購物車失敗!");
+        // alert("清空購物車失敗!");
+        Swal.fire({
+          title: "清空購物車失敗",
+          text: "請重新操作一次",
+          icon: "error",
+          confirmButtonText: "確定"
+        });
       }
     }
   };
@@ -110,7 +121,13 @@ export default function CartPage() {
       getCart();
     } catch (error) {
       console.error(error);
-      alert("刪除單一商品失敗!");
+      // alert("刪除單一商品失敗!");
+      Swal.fire({
+        title: "刪除單一商品失敗",
+        text: "請重新操作一次",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
     }
   };
 
@@ -126,7 +143,13 @@ export default function CartPage() {
       getCart();
     } catch (error) {
       console.error(error);
-      alert("更新購物車商品數量失敗!");
+      // alert("更新購物車商品數量失敗!");
+      Swal.fire({
+        title: "更新購物車商品數量失敗",
+        text: "請重新操作一次",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
     }
   };
 
@@ -143,8 +166,13 @@ export default function CartPage() {
       });
     } catch (error) {
       console.error(error);
-      alert(error.response.data.message);
-      
+      // alert(error.response.data.message);
+      Swal.fire({
+        title: "優惠券套用失敗",
+        text: error.response.data.message,
+        icon: "error",
+        confirmButtonText: "確定"
+      });
     } finally {
       getCart();
     }

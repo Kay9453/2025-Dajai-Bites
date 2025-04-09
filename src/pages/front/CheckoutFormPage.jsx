@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Toast from "../../components/Toast";
 import { useCallback, useEffect, useState } from "react";
 import ProgressBar from "../../components/ProgressBar";
+import Swal from "sweetalert2";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -20,7 +21,12 @@ export default function CheckoutFormPage() {
       setCart(res.data.data);
     } catch (error) {
       console.error(error);
-      alert("取得購物車列表失敗");
+      // alert("取得購物車列表失敗");
+      Swal.fire({
+        title: "取得購物車列表失敗",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
     }
   }, []);
 

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Toast from "../../components/Toast";
 import { useDispatch } from "react-redux";
 import { updateCartData } from "../../redux/cartSlice";
+import Swal from "sweetalert2";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -70,7 +71,13 @@ export default function ProductsPage() {
       });
     } catch (error) {
       console.error(error);
-      alert("加入購物車失敗!");
+      // alert("加入購物車失敗!");
+      Swal.fire({
+        title: "加入購物車失敗",
+        text: "請重新操作一次",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
     } finally {
       setIsLoading(false);
     }
@@ -85,7 +92,12 @@ export default function ProductsPage() {
       // setCart(res.data.data);
     } catch (error) {
       console.error(error);
-      alert("取得購物車列表失敗");
+      // alert("取得購物車列表失敗");
+      Swal.fire({
+        title: "取得購物車列表失敗",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
     }
   }, [dispatch]);
 

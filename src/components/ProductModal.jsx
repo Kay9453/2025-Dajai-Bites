@@ -3,6 +3,7 @@ import axios from "axios";
 import { Modal } from "bootstrap";
 import Swal from "sweetalert2";
 import Toast from "../components/Toast";
+import PropTypes from "prop-types";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -181,7 +182,13 @@ function ProductModal({
       // handleCloseProductModal();
     } catch (error) {
       console.error(error);
-      alert("更新產品失敗!");
+      Swal.fire({
+        title: "更新產品失敗",
+        text: "請重新操作一次",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
+      // alert("更新產品失敗!");
     }
   };
 
@@ -564,3 +571,11 @@ function ProductModal({
 }
 
 export default ProductModal;
+
+ProductModal.propTypes = {
+  modalMode: PropTypes.oneOf(["create", "edit"]),
+  tempProduct: PropTypes.object.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
+  getProducts: PropTypes.func.isRequired
+};

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 export default function ProgressBar({ currentStep }) {
   const steps = ["確認購物車", "選擇運送與付款方式", "結帳", "完成訂單"];
 
@@ -23,4 +24,8 @@ export default function ProgressBar({ currentStep }) {
       })}
     </ol>
   );
+}
+
+ProgressBar.propTypes = {
+  currentStep: PropTypes.number.isRequired
 }

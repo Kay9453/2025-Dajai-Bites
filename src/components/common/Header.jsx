@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { updateCartData } from "../../redux/cartSlice";
+import Swal from "sweetalert2";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -50,7 +51,12 @@ export default function Header() {
       // setCart(res.data.data);
     } catch (error) {
       console.error(error);
-      alert("取得購物車列表失敗");
+      Swal.fire({
+        title: "取得購物車列表失敗",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
+      // alert("取得購物車列表失敗");
     }
   }, [dispatch]);
 

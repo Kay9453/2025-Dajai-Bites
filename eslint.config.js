@@ -33,7 +33,7 @@ export default [
       ...reactHooks.configs.recommended.rules,
       indent: ["error", 2],
       'no-unused-vars': ['error'],
-      'react/prop-types': 'off',
+      // 'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
       "react-refresh/only-export-components": [
         "warn",

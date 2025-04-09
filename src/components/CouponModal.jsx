@@ -3,6 +3,7 @@ import axios from "axios";
 import { Modal } from "bootstrap";
 import Toast from "../components/Toast";
 import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -136,7 +137,12 @@ function CouponModal({
       // handleCloseCouponModal();
     } catch (error) {
       console.error(error);
-      alert("更新優惠券失敗!");
+      Swal.fire({
+        title: "更新優惠券失敗",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
+      // alert("更新優惠券失敗!");
     }
   };
 
@@ -264,3 +270,11 @@ function CouponModal({
 }
 
 export default CouponModal;
+
+CouponModal.propTypes = {
+  modalMode: PropTypes.oneOf(["create", "edit"]),
+  tempCoupon: PropTypes.object.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
+  getCoupons: PropTypes.func.isRequired
+};

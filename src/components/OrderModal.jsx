@@ -3,6 +3,7 @@ import axios from "axios";
 import { Modal } from "bootstrap";
 import Swal from "sweetalert2";
 import Toast from "../components/Toast";
+import PropTypes from "prop-types";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -96,7 +97,13 @@ function OrderModal({ modalMode, tempOrder, isOpen, setIsOpen, getOrders }) {
       handleCloseOrderModal();
     } catch (error) {
       console.error(error);
-      alert("更新訂單失敗!");
+      // alert("更新訂單失敗!");
+      Swal.fire({
+        title: "更新訂單失敗",
+        text: "請重新操作一次",
+        icon: "error",
+        confirmButtonText: "確定"
+      });
     }
   };
 
@@ -291,3 +298,11 @@ function OrderModal({ modalMode, tempOrder, isOpen, setIsOpen, getOrders }) {
 }
 
 export default OrderModal;
+
+OrderModal.propTypes = {
+  modalMode: PropTypes.oneOf(["edit"]),
+  tempOrder: PropTypes.object.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
+  getOrders: PropTypes.func.isRequired
+};
