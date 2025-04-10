@@ -25,12 +25,12 @@ export default function AboutPage() {
           </ol>
         </nav>
         <h2 className="mb-3 text-brand-03">關於我們</h2>
-        <div className="d-flex flex-column gap-2 gap-lg-4">
+        <div className="d-flex flex-column gap-2 gap-lg-4 overflow-x-hidden">
           <div className="card mb-3 border-0" data-aos="fade-right">
             <div className="row">
               <div className="col-md-6">
                 <img
-                  className="w-100 object-fit-cover border-16 about-img"
+                  className="border-16 about-img"
                   src="https://images.unsplash.com/photo-1516226392000-3536759b78e7?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   alt="品牌故事"
                 />
@@ -66,7 +66,7 @@ export default function AboutPage() {
             <div className="row flex-md-row-reverse">
               <div className="col-md-6">
                 <img
-                  className="w-100 object-fit-cover border-16 about-img"
+                  className="border-16 about-img"
                   src="https://images.unsplash.com/photo-1526127230111-0197afe94d72?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   alt="品牌理念"
                 />
@@ -88,7 +88,7 @@ export default function AboutPage() {
             <div className="row">
               <div className="col-md-6">
                 <img
-                  className="w-100 object-fit-cover border-16 about-img"
+                  className="border-16 about-img"
                   src="https://images.unsplash.com/photo-1486590868314-c6c18732d981?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   alt="使命與願景"
                 />
@@ -110,13 +110,13 @@ export default function AboutPage() {
           </div>
         </div>
       </div>
-      <div className="container-fluid bg-brand-05">
+      <div className="bg-brand-05">
         <div className="container">
           <div className="d-flex flex-column align-items-center py-5" data-aos="fade-up">
             <h3 className="card-title fw-bold mb-4 text-brand-03">
               開啟你的美味晨光
             </h3>
-            <p className="fs-5 card-text mb-3 fw-bold text-center px-3">
+            <p className="fs-5 card-text mb-3 fw-bold text-center mx-3">
               現在就挑選你的理想早餐，用最簡單的方式開始美好早晨！
             </p>
             <Link
