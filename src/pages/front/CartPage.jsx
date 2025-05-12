@@ -488,7 +488,7 @@ export default function CartPage() {
                   </p>
                 </div>
                 <Link to="/checkout" className={`btn btn-dark w-100 mt-4 ${cart.carts?.length === 0 ? "disabled":""}`}>
-                  前往結賬
+                  前往結帳
                 </Link>
               </div>
             </div>
