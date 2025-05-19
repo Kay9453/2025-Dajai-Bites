@@ -6,6 +6,10 @@ import { NavLink } from "react-router-dom";
 import { updateCartData } from "../../redux/cartSlice";
 import Swal from "sweetalert2";
 
+import { auth } from "../../utils/firebase";
+import { onAuthStateChanged } from "firebase/auth";   //  監聽登入狀態
+import { signOut } from "firebase/auth";
+
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
@@ -15,11 +19,12 @@ export default function Header() {
     { path: "/about", name: "關於我們", icon: "menu_book" },
     { path: "/products", name: "產品列表", icon: "breakfast_dining" },
     { path: "/cart", name: "購物車", icon: "shopping_cart" },
-    // {path: "/login", name:"登入/註冊", icon: "login"}
   ];
 
   const [isOpen, setIsOpen] = useState(false); // 控制 Navbar 開關
   const navRef = useRef(null);
+
+  const [user,setUser] = useState(null);  //登入狀態
 
   const carts = useSelector((state) => state.cart.carts);
   const dispatch = useDispatch();
@@ -42,6 +47,22 @@ export default function Header() {
     }
   };
 
+  const handleLogin = () =>{
+    onAuthStateChanged(auth,(currentUser)=>{
+      setUser(currentUser);
+      console.log("currentUser",currentUser);
+    })
+  }
+
+  const handleLogout = () =>{
+    signOut(auth)
+      .then(()=>{
+        setUser(null);
+      }).catch((error)=>{
+        console.error(error);
+      })
+  }
+
   // 取得購物車
   const getCart = useCallback(async () => {
     try {
@@ -63,6 +84,10 @@ export default function Header() {
   useEffect(() => {
     getCart();
   }, [getCart]);
+
+  useEffect(()=>{
+    handleLogin();
+  },[]);
 
   return (
     <div className="container-fluid d-flex flex-column px-0">
@@ -126,6 +151,49 @@ export default function Header() {
                   </NavLink>
                 );
               })}
+              {user ?
+                <>
+                  {/* PC */}
+                  <div className="nav-item dropdown me-4 d-none d-lg-block">
+                    <button
+                      className="btn nav-link dropdown-toggle d-flex align-items-center"
+                      type="button"
+                      id="userDropdown"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <span className="material-symbols-outlined me-1">person</span>
+                      Hi! {user.displayName}
+                    </button>
+                    <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                      <li>
+                        <button className="dropdown-item" onClick={handleLogout}>
+                          登出
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                  {/* Mobile */}
+                  <div className="nav-item me-4 d-flex flex-column flex-lg-row align-items-center gap-2 d-lg-none">
+                    <div className="nav-link d-flex align-items-center">
+                      <span className="material-symbols-outlined pe-2">
+                        person
+                      </span>
+                      <span>Hi! {user.displayName}</span>
+                    </div>
+                    <button 
+                      type="button"
+                      className="btn nav-link text-decoration-none" 
+                      onClick={()=>handleLogout()}>登出</button>
+                  </div>
+                </>: 
+                <NavLink
+                  key="/login"
+                  className="nav-item nav-link me-4 d-flex align-items-center"
+                  to="/login"
+                >登入
+                </NavLink>
+              }
             </div>
           </div>
         </div>

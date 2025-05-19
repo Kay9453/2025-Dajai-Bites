@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import "./assets/styles/all.scss";
 import "bootstrap/dist/js/bootstrap.js";
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import App from "./App.jsx";
 import { RouterProvider } from "react-router-dom";
