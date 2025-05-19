@@ -14,6 +14,8 @@ import NotFound from "../components/NotFound";
 import AboutPage from "../pages/front/AboutPage";
 import AdminOrdersPage from "../pages/admin/AdminOrdersPage";
 import AdminCouponPage from "../pages/admin/AdminCouponPage";
+import LoginPage from "../pages/front/LoginPage";
+import RegisterPage from "../pages/front/RegisterPage";
 
 const routes = [
   {
@@ -23,6 +25,14 @@ const routes = [
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path: "/login",
+        element: <LoginPage />,
+      },
+      {
+        path: "/register",
+        element: <RegisterPage />,
       },
       {
         path: "/products",
