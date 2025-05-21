@@ -82,19 +82,16 @@ export default function RegisterPage(){
       // 註冊後更新暱稱
       await updateProfile(res.user, {
         displayName: username,
-        
       }).then((res)=>{
         console.log("更新成功",res);
       }).catch((err)=>{
-        console.log("更新失敗",err);
-        
+        console.error("更新失敗",err);
       });
 
       Toast.fire({
         icon: "success",
         title: "註冊成功!",
       });
-      console.log("✅ 使用者暱稱：", auth.currentUser.displayName);
       setTimeout(()=>{
         navigate("/login");
       },1000)
@@ -111,88 +108,90 @@ export default function RegisterPage(){
     }
   }
   return(
-    <div className="d-flex flex-column justify-content-center vh-100 bg-brand-05">
+    <div className="d-flex flex-column justify-content-center min-vh-100 bg-brand-05">
       <div className="container">
         <div className="row">
           <div className="col-lg-6 col-12 mx-auto">
-            <div className="mx-auto bg-white border-16 py-5">
+            <div className="mx-auto bg-white border-16 py-5 my-5">
               <h2 className="fs-1 text-brand-03 text-center mb-lg-5 mb-3 ">註冊會員</h2>
               <form onSubmit={onSubmit} className="d-flex flex-column gap-3 px-md-5 px-2 login-form">
-                <div className="form mb-3">
-                  <label htmlFor="email" className="mb-2">帳號</label>
-                  <input
-                    value={email}
-                    onChange={(e)=>{
-                      setEmail(e.target.value);
-                    }}
-                    type="text"
-                    name="email"
-                    className="form-control"
-                    id="email"
-                    placeholder="name@example.com"
-                  />
-                  {emailErrorMessage && (
-                    <p className="text-danger my-2">
-                      {emailErrorMessage}
-                    </p>
-                  )}
-                </div>
-                <div className="form mb-3">
-                  <label htmlFor="username" className="mb-2">暱稱</label>
-                  <input
-                    value={username}
-                    onChange={(e)=>{
-                      setUsername(e.target.value);
-                    }}
-                    type="text"
-                    name="username"
-                    className="form-control"
-                    id="username"
-                    placeholder="請輸入你的暱稱"
-                  />
-                  {usernameErrorMessage && (
-                    <p className="text-danger my-2">
-                      {usernameErrorMessage}
-                    </p>
-                  )}
-                </div>
-                <div className="form mb-3">
-                  <label htmlFor="password" className="mb-2">設定密碼</label>
-                  <input
-                    value={password}
-                    onChange={(e)=>{
-                      setPassword(e.target.value);
-                    }}
-                    type="password"
-                    name="password"
-                    className="form-control"
-                    id="password"
-                    placeholder=""
-                  />
-                  {passwordErrorMessage && (
-                    <p className="text-danger my-2">
-                      {passwordErrorMessage}
-                    </p>
-                  )}
-                </div>
-                <div className="form">
-                  <label htmlFor="passwordCheck" className="mb-2">確認密碼</label>
-                  <input
-                    value={passwordCheck}
-                    onChange={(e)=>{
-                      setPasswordCheck(e.target.value);
-                    }}
-                    type="password"
-                    name="passwordCheck"
-                    className="form-control"
-                    id="passwordCheck"
-                    placeholder=""
-                  />
-                  {passwordCheckErrorMessage && (
-                    <p className="text-danger my-2">
-                      {passwordCheckErrorMessage}
-                    </p>
-                  )}
+                <div>
+                  <div className="form mb-3">
+                    <label htmlFor="email" className="mb-2">帳號</label>
+                    <input
+                      value={email}
+                      onChange={(e)=>{
+                        setEmail(e.target.value);
+                      }}
+                      type="text"
+                      name="email"
+                      className="form-control"
+                      id="email"
+                      placeholder="name@example.com"
+                    />
+                    {emailErrorMessage && (
+                      <p className="fs-14 text-danger my-2">
+                        {emailErrorMessage}
+                      </p>
+                    )}
+                  </div>
+                  <div className="form mb-3">
+                    <label htmlFor="username" className="mb-2">暱稱</label>
+                    <input
+                      value={username}
+                      onChange={(e)=>{
+                        setUsername(e.target.value);
+                      }}
+                      type="text"
+                      name="username"
+                      className="form-control"
+                      id="username"
+                      placeholder="請輸入你的暱稱"
+                    />
+                    {usernameErrorMessage && (
+                      <p className="fs-14 text-danger my-2">
+                        {usernameErrorMessage}
+                      </p>
+                    )}
+                  </div>
+                  <div className="form mb-3">
+                    <label htmlFor="password" className="mb-2">設定密碼</label>
+                    <input
+                      value={password}
+                      onChange={(e)=>{
+                        setPassword(e.target.value);
+                      }}
+                      type="password"
+                      name="password"
+                      className="form-control"
+                      id="password"
+                      placeholder=""
+                    />
+                    {passwordErrorMessage && (
+                      <p className="fs-14 text-danger my-2">
+                        {passwordErrorMessage}
+                      </p>
+                    )}
+                  </div>
+                  <div className="form">
+                    <label htmlFor="passwordCheck" className="mb-2">確認密碼</label>
+                    <input
+                      value={passwordCheck}
+                      onChange={(e)=>{
+                        setPasswordCheck(e.target.value);
+                      }}
+                      type="password"
+                      name="passwordCheck"
+                      className="form-control"
+                      id="passwordCheck"
+                      placeholder=""
+                    />
+                    {passwordCheckErrorMessage && (
+                      <p className="fs-14 text-danger my-2">
+                        {passwordCheckErrorMessage}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <button type="submit" className="fs-5 btn btn-custom btn-filled">註冊</button>
                 <p className="text-center">已經是會員？

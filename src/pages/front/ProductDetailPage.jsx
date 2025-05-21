@@ -5,12 +5,13 @@ import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { updateCartData } from "../../redux/cartSlice";
 import Toast from "../../components/Toast";
 import Swal from "sweetalert2";
+import { UserContext } from "../../context/UserContext";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -24,6 +25,8 @@ export default function ProductDetailPage() {
 
   const [product, setProduct] = useState({});
   const [qtySelect, setQtySelect] = useState(1);
+
+  const {user} = useContext(UserContext);
 
   const dispatch = useDispatch();
 
@@ -253,7 +256,15 @@ export default function ProductDetailPage() {
                     type="button"
                     className="d-flex text-nowrap btn btn-brand-01 text-white w-50 d-flex gap-1"
                     onClick={() => {
-                      addCartItem(product.id, qtySelect);
+                      if(user){
+                        addCartItem(product.id, qtySelect);
+                      }else{
+                        Swal.fire({
+                          title: "請先登入",
+                          icon: "warning",
+                          confirmButtonText: "確定"
+                        });
+                      }
                     }}
                   >
                     加入購物車
@@ -273,7 +284,15 @@ export default function ProductDetailPage() {
                     className="btn btn-brand-01 d-flex align-items-center gap-1"
                     style={{ backgroundColor: "transparent" }}
                     onClick={() => {
-                      toggleFavoriteItem(product.id);
+                      if(user){
+                        toggleFavoriteItem(product.id);
+                      }else{
+                        Swal.fire({
+                          title: "請先登入",
+                          icon: "warning",
+                          confirmButtonText: "確定"
+                        });
+                      }
                     }}
                   >
                     <i
