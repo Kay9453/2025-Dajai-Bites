@@ -49,8 +49,7 @@ export default function LoginPage(){
         return
       }
 
-      const res = await signInWithEmailAndPassword(auth,email,password);
-      console.log("登入成功",res);
+      await signInWithEmailAndPassword(auth,email,password);
       Toast.fire({
         icon: "success",
         title: "登入成功!",
@@ -69,12 +68,12 @@ export default function LoginPage(){
   }
 
   return(
-    <div className="d-flex flex-column justify-content-center vh-100 bg-brand-05">
+    <div className="d-flex flex-column justify-content-center min-vh-100 bg-brand-05">
       <div className="container">
         <div className="row">
           <div className="col-lg-6 col-12 mx-auto">
-            <div className="mx-auto bg-white border-16 py-5">
-              <h2 className="fs-1 text-brand-03 text-center mb-lg-5 mb-3 ">會員登入</h2>
+            <div className="mx-auto bg-white border-16 py-5 my-5">
+              <h2 className="fs-1 text-brand-03 text-center mb-lg-5 mb-3">會員登入</h2>
               <form onSubmit={onSubmit} className="d-flex flex-column gap-3 px-md-5 px-2 login-form">
                 <div className="form mb-3">
                   <label htmlFor="username" className="mb-2">帳號</label>
@@ -90,7 +89,7 @@ export default function LoginPage(){
                     placeholder="name@example.com"
                   />
                   {emailErrorMessage && (
-                    <p className="text-danger my-2">
+                    <p className="fs-14 text-danger my-2">
                       {emailErrorMessage}
                     </p>
                   )}
@@ -109,12 +108,16 @@ export default function LoginPage(){
                       id="password"
                       placeholder=""
                     />
-                    <Link to="/" className="fs-14 text-decoration-underline text-end">忘記密碼?</Link>
-                    {passwordErrorMessage && (
-                      <p className="text-danger my-2">
-                        {passwordErrorMessage}
-                      </p>
-                    )}
+                    {passwordErrorMessage ? 
+                      <div className="d-flex justify-content-between align-items-center">
+                        <p className="fs-14 text-danger my-2">
+                          {passwordErrorMessage}
+                        </p>
+                        <Link to="/" className="fs-14 text-decoration-underline">忘記密碼?</Link>
+                      </div>:
+                      <div className="text-end">
+                        <Link to="/" className="fs-14 text-decoration-underline">忘記密碼?</Link>
+                      </div>}
                   </div>
                 </div>
                 {errorMessage && (

@@ -2,9 +2,10 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Toast from "../../components/Toast";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import ProgressBar from "../../components/ProgressBar";
 import Swal from "sweetalert2";
+import { UserContext } from "../../context/UserContext";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -12,7 +13,19 @@ const API_PATH = import.meta.env.VITE_API_PATH;
 export default function CheckoutFormPage() {
 
   const [cart, setCart] = useState({}); //儲存購物車列表
+  const {user} = useContext(UserContext);
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    if(!user){
+      Swal.fire({
+        title: "請先登入",
+        icon: "warning",
+        confirmButtonText: "確定"
+      });
+      navigate("/login");
+    }
+  },[user,navigate]);
 
   // 取得購物車
   const getCart = useCallback(async () => {

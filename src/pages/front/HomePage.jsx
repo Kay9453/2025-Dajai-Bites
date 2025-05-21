@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Toast from "../../components/Toast";
 import { useDispatch } from "react-redux";
@@ -7,6 +7,7 @@ import { updateCartData } from "../../redux/cartSlice";
 import AOS from 'aos';
 import 'aos/dist/aos.css'; 
 import Swal from "sweetalert2";
+import { UserContext } from "../../context/UserContext";
 AOS.init();
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -15,6 +16,7 @@ const API_PATH = import.meta.env.VITE_API_PATH;
 export default function HomePage() {
 
   const [products, setProducts] = useState([]);
+  const {user} = useContext(UserContext); //登入狀態
 
   const dispatch = useDispatch();
 
@@ -235,7 +237,15 @@ export default function HomePage() {
                       className="border-0 add-fav-icon"
                       style={{ backgroundColor: "transparent" }}
                       onClick={() => {
-                        toggleFavoriteItem(product.id);
+                        if(user){
+                          toggleFavoriteItem(product.id);
+                        }else{
+                          Swal.fire({
+                            title: "請先登入",
+                            icon: "warning",
+                            confirmButtonText: "確定"
+                          });
+                        }
                       }}
                     >
                       <i
@@ -260,7 +270,15 @@ export default function HomePage() {
                     <button
                       type="button"
                       onClick={() => {
-                        addCartItem(product.id, 1);
+                        if(user){
+                          addCartItem(product.id, 1);
+                        }else{
+                          Swal.fire({
+                            title: "請先登入",
+                            icon: "warning",
+                            confirmButtonText: "確定"
+                          });
+                        }
                       }}
                       className="btn btn-custom btn-filled"
                     >

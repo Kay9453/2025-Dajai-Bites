@@ -1,7 +1,7 @@
 import axios from "axios";
 import Toast from "../../components/Toast";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { updateCartData } from "../../redux/cartSlice";
 import Swal from "sweetalert2";
@@ -10,12 +10,14 @@ import Swiper from "swiper";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import ProgressBar from "../../components/ProgressBar";
+import { UserContext } from "../../context/UserContext";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
 export default function CartPage() {
 
+  const {user} = useContext(UserContext);
   const [cart, setCart] = useState({}); //儲存購物車列表
   const [products, setProducts] = useState([]);
   const [coupon,setCoupon] = useState("");
@@ -23,6 +25,7 @@ export default function CartPage() {
   const swiperRef = useRef();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (products.length > 0) {
@@ -48,6 +51,17 @@ export default function CartPage() {
       });
     }
   }, [products]);
+
+  useEffect(()=>{
+    if(!user){
+      Swal.fire({
+        title: "請先登入",
+        icon: "warning",
+        confirmButtonText: "確定"
+      });
+      navigate("/login");
+    }
+  },[user,navigate]);
 
   const getProducts = useCallback(async () => {
     try {
