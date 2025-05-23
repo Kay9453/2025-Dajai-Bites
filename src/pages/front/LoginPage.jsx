@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../utils/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import Toast from "../../components/Toast";
+import Swal from "sweetalert2";
 
 export default function LoginPage(){
   const [email,setEmail] = useState("");
@@ -13,6 +14,7 @@ export default function LoginPage(){
   const [errorMessage,setErrorMessage] = useState("");
 
   const navigate = useNavigate();
+  const providerGoogle = new GoogleAuthProvider();
 
   // email 正則式
   const emailRule = /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
@@ -67,6 +69,26 @@ export default function LoginPage(){
     }
   }
 
+  const signInByGoogle = async ()=>{
+    try {
+      await signInWithPopup(auth,providerGoogle);
+      Toast.fire({
+        icon: "success",
+        title: "登入成功!",
+      });
+      setTimeout(()=>{
+        navigate("/");
+      },1000)
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "登入失敗，請重新嘗試!",
+        text: error.code,
+        confirmButtonText: "確定"
+      });
+    }
+  }
+
   return(
     <div className="d-flex flex-column justify-content-center min-vh-100 bg-brand-05">
       <div className="container">
@@ -113,10 +135,10 @@ export default function LoginPage(){
                         <p className="fs-14 text-danger my-2">
                           {passwordErrorMessage}
                         </p>
-                        <Link to="/" className="fs-14 text-decoration-underline">忘記密碼?</Link>
+                        <Link to="/reset-password" className="fs-14 text-decoration-underline">忘記密碼?</Link>
                       </div>:
                       <div className="text-end">
-                        <Link to="/" className="fs-14 text-decoration-underline">忘記密碼?</Link>
+                        <Link to="/reset-password" className="fs-14 text-decoration-underline">忘記密碼?</Link>
                       </div>}
                   </div>
                 </div>
@@ -130,7 +152,27 @@ export default function LoginPage(){
                   <Link className="text-decoration-underline" to="/register">前往註冊</Link>
                 </p>
               </form>
-              <p className="text-center my-3">----- 或使用第三方登入 -----</p>
+              <div className="divider my-4 px-md-6 px-3">
+                <span className="divider-text">或使用第三方登入</span>
+              </div>
+
+              <div className="d-flex justify-content-center px-md-5 px-2">
+                <button className="gsi-material-button google-login-btn" onClick={signInByGoogle}>
+                  <div className="gsi-material-button-state"></div>
+                  <div className="gsi-material-button-content-wrapper">
+                    <div className="gsi-material-button-icon">
+                      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" xmlnsXlink="http://www.w3.org/1999/xlink" style={{display: "block"}}>
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                        <path fill="none" d="M0 0h48v48H0z"></path>
+                      </svg>
+                    </div>
+                    <span className="gsi-material-button-contents">使用 Google 帳號登入</span>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
         </div>
