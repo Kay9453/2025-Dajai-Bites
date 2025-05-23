@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function CheckoutFailPage() {
   return (
     <div
-      className="container d-flex justify-content-center align-items-center "
+      className="container d-flex justify-content-center align-items-center"
       style={{ height: "calc(100vh - 71px)" }}
     >
       <div className="h-100 d-flex flex-column justify-content-center mt-4">
