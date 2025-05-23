@@ -4,6 +4,7 @@ import { auth } from "../../utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { updateProfile } from "firebase/auth";
 import Toast from "../../components/Toast";
+import Swal from "sweetalert2";
 
 export default function RegisterPage(){
   const [email,setEmail] = useState("");
@@ -77,17 +78,21 @@ export default function RegisterPage(){
         return
       }
       
-      const res = await createUserWithEmailAndPassword(auth,email,password);
+      const result = await createUserWithEmailAndPassword(auth,email,password);
 
-      // 註冊後更新暱稱
-      await updateProfile(res.user, {
-        displayName: username,
-      }).then((res)=>{
-        console.log("更新成功",res);
-      }).catch((err)=>{
-        console.error("更新失敗",err);
-      });
-
+      try {
+        // 註冊後更新暱稱
+        await updateProfile(result.user, {
+          displayName: username,
+        })
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "暱稱更新失敗，請重新嘗試",
+          text: error.code,
+          confirmButtonText: "確定"
+        });
+      }
       Toast.fire({
         icon: "success",
         title: "註冊成功!",
