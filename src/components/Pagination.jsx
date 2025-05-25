@@ -5,7 +5,7 @@ function Pagination({ pageInfo, handlePageChange }) {
   return (
     <div className="d-flex justify-content-center">
       <nav>
-        <ul className="pagination">
+        <ul className="pagination mt-3">
           <li className={`page-item ${!pageInfo.has_pre && "disabled"}`}>
             <Link
               onClick={() => {

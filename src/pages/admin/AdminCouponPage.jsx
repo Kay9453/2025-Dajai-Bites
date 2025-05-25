@@ -162,11 +162,11 @@ export default function AdminCouponPage() {
                 ))}
               </tbody>
             </table>
-            <Pagination
-              pageInfo={pageInfo}
-              handlePageChange={handlePageChange}
-            />
           </div>
+          <Pagination
+            pageInfo={pageInfo}
+            handlePageChange={handlePageChange}
+          />
         </div>
       </main>
       <CouponModal
