@@ -12,13 +12,14 @@
 
 ### 網站截圖
 ###### [前台]
-<img width="512" alt="首頁截圖" src="https://firebasestorage.googleapis.com/v0/b/kayismeblog.appspot.com/o/Side-Project%2F2025-DajaiBreakfast%2Fdaijai-bites-screenshot-frontend-compressed.png?alt=media&token=46116570-1135-479c-bc41-1d3a4e3d3dc1" />
+<img width="512" alt="首頁截圖" src="https://firebasestorage.googleapis.com/v0/b/kayismeblog.appspot.com/o/Side-Project%2F2025-DajaiBreakfast%2Fdaijai-bites-screenshot-frontend-v2-compressed.png?alt=media&token=ed68ae20-7a46-446f-b8a7-a9559292c339" />
 
 ###### [後台]
 <img width="512" alt="後台截圖" src="https://firebasestorage.googleapis.com/v0/b/kayismeblog.appspot.com/o/Side-Project%2F2025-DajaiBreakfast%2Fdaijai-bites-screenshot-backend-compressed.png?alt=media&token=f1d2679d-0eea-4dde-82ca-37383ac53fac" />
 
 ### 功能
 #### [前台]
+- 註冊、登入、登出、忘記密碼功能
 - 關於我們介紹電商網站
 - 產品列表、內頁，讓使用者瀏覽、加入購物車與加入我的最愛
 - 電商購物車操作：新增商品、調整數量、移除與清空購物車
@@ -47,6 +48,7 @@
 - [React Loading](https://github.com/fakiolinho/react-loading)
 - [Axios](https://github.com/axios/axios)
 - [Prop-Types](https://github.com/facebook/prop-types)
+- Firebase
 - Material Icons
 
 ## 安裝與部署
