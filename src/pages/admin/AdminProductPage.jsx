@@ -181,11 +181,11 @@ export default function AdminProductPage() {
                 ))}
               </tbody>
             </table>
-            <Pagination
-              pageInfo={pageInfo}
-              handlePageChange={handlePageChange}
-            />
           </div>
+          <Pagination
+            pageInfo={pageInfo}
+            handlePageChange={handlePageChange}
+          />
           {isScreenLoading && (
             <div
               className="d-flex justify-content-center align-items-center"
