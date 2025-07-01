@@ -258,7 +258,11 @@ export default function HomePage() {
                     </button>
                   </div>
                   <div className="card-body d-flex flex-column gap-3">
-                    <h5 className="card-title">{product.title}</h5>
+                    <h5 className="card-title">
+                      <Link to={`/products/${product.id}`}>
+                        {product.title}
+                      </Link>
+                    </h5>
                     <div className="d-flex gap-2">
                       <span className="text-brand-04 fw-bold">
                         NT${product.origin_price}
